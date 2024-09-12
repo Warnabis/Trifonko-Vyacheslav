@@ -116,11 +116,11 @@ public:
             cout << "Все объекты удалены" << endl;
         }
         else {
-            auto it = remove_if(services.begin(), services.end(),
+            auto iterator = remove_if(services.begin(), services.end(),
                 [&checkname](const subscription& service) { return service.name == checkname; });
 
-            if (it != services.end()) {
-                services.erase(it, services.end());
+            if (iterator != services.end()) {
+                services.erase(iterator, services.end());
                 cout << "Услуга \"" << checkname << "\" удалена" << endl;
             }
             else {
