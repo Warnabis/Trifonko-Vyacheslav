@@ -32,7 +32,11 @@ public:
     }
 
     void output() const {
-        cout << "Айди: " << id << " Имя: " << name << " Цена: " << price << " Кол-во занятий в услуге: " << days << endl;
+        cout << "Айди: " << id
+            << " Имя: " << name
+            << " Цена: " << price
+            << " Кол-во занятий в услуге: " << days
+            << endl;
     }
 
     void create(vector<Subscription>& services) const {
@@ -96,7 +100,8 @@ public:
             }
         }
         if (!found) {
-            cout << "Услуга с названием \"" << checkname << "\" не найдена" << endl;
+            cout << "Услуга с названием \"" << checkname
+                << "\" не найдена" << endl;
         }
         wait();
     }
@@ -110,22 +115,25 @@ public:
 
         string checkname;
         cout << "Введите название услуги для удаления (или \"all\" для удаления всех): ";
-        cin >> checkname;
+            cin >> checkname;
 
-        if (name == "all") {
+        if (checkname == "all") {
             services.clear();
             cout << "Все объекты удалены" << endl;
         }
         else {
             auto iterator = remove_if(services.begin(), services.end(),
-                [&checkname](const Subscription& service) { return service.name == checkname; });
+                [&checkname](const Subscription& service) {
+                    return service.name == checkname;
+                });
 
             if (iterator != services.end()) {
                 services.erase(iterator, services.end());
                 cout << "Услуга \"" << checkname << "\" удалена" << endl;
             }
             else {
-                cout << "Услуга с названием \"" << checkname << "\" не найдена" << endl;
+                cout << "Услуга с названием \"" << checkname
+                    << "\" не найдена" << endl;
             }
         }
         wait();
@@ -140,7 +148,7 @@ public:
 
         if (selectedservice == nullptr) {
             cout << "Услуга не выбрана. Выберите услугу перед тренировкой" << endl;
-            string checkname;
+                string checkname;
             cout << "Введите название услуги для выбора: ";
             cin >> checkname;
 
@@ -148,14 +156,16 @@ public:
             for (auto& service : services) {
                 if (service.name == checkname) {
                     selectedservice = &service;
-                    cout << "Услуга \"" << selectedservice->name << "\" выбрана." << endl;
+                    cout << "Услуга \"" << selectedservice->name
+                        << "\" выбрана." << endl;
                     found = true;
                     break;
                 }
             }
 
             if (!found) {
-                cout << "Услуга с названием \"" << checkname << "\" не найдена." << endl;
+                cout << "Услуга с названием \"" << checkname
+                    << "\" не найдена." << endl;
                 wait();
                 return;
             }
@@ -163,20 +173,25 @@ public:
 
         int choice;
         do {
-            cout << "\n1. Провести тренировку\n" << "2. Проверить статус тренировки\n" << "3. Отменить текущую услугу\n" << "4. Вернуться в главное меню\n" << "Выберите опцию: ";
+            cout << "\n1. Провести тренировку\n"
+                << "2. Проверить статус тренировки\n"
+                << "3. Отменить текущую услугу\n"
+                << "4. Вернуться в главное меню\n"
+                << "Выберите опцию: ";
 
             while (!(cin >> choice)) {
                 cin.clear();
                 cin.ignore(numeric_limits<streamsize>::max(), '\n');
-                cout << "Неверный выбор. Попробуйте снова" << endl << "Выберите опцию: ";
-
+                cout << "Неверный выбор. Попробуйте снова"
+                    << endl << "Выберите опцию: ";
             }
 
             switch (choice) {
             case 1:
                 if (selectedservice->days > 0) {
                     selectedservice->days--;
-                    cout << "Тренировка проведена.Осталось дней: " << selectedservice->days << endl;
+                    cout << "Тренировка проведена. Осталось дней: "
+                        << selectedservice->days << endl;
                 }
                 else {
                     cout << "У этой услуги больше не осталось доступных дней для тренировок" << endl;
@@ -185,12 +200,15 @@ public:
                 break;
 
             case 2:
-                cout << "Выбранная услуга: \"" << selectedservice->name << "\"\n" << "Осталось дней: " << selectedservice->days << endl;
+                cout << "Выбранная услуга: \""
+                    << selectedservice->name << "\"\n"
+                    << "Осталось дней: " << selectedservice->days << endl;
                 wait();
                 break;
 
             case 3:
-                cout << "Выход из услуги \"" << selectedservice->name << "\"." << endl;
+                cout << "Выход из услуги \"" <<
+                    selectedservice->name << "\"." << endl;
                 selectedservice = nullptr;
                 wait();
                 return;
@@ -209,9 +227,6 @@ public:
     }
 };
 
-
-
-
 int main() {
     setlocale(LC_ALL, "rus");
     vector<Subscription> services;
@@ -220,7 +235,14 @@ int main() {
     int choice;
 
     do {
-        cout << "\n1. Создать новый объект\n" << "2. Вывести объект(ы)\n" << "3. Обновить объект(ы)\n" << "4. Удалить объект(ы)\n" << "5. Управление тренировками (выбор, тренировка, статус)\n" << "6. Выйти из программы\n" << "Выберите опцию: ";
+        cout << "\n1. Создать новый объект\n"
+            << "2. Вывести объект(ы)\n"
+            << "3. Обновить объект(ы)\n"
+            << "4. Удалить объект(ы)\n"
+            << "5. Управление тренировками (выбор, тренировка, статус)\n"
+            << "6. Выйти из программы\n"
+            << "Выберите опцию: ";
+
         cin >> choice;
         cout << endl;
 
@@ -228,21 +250,27 @@ int main() {
         case 1:
             service.create(services);
             break;
+
         case 2:
             service.read(services);
             break;
+
         case 3:
             service.update(services);
             break;
+
         case 4:
             service.deletes(services);
             break;
+
         case 5:
             service.workout(services, selectedservice);
             break;
+
         case 6:
             cout << "Выход из программы..." << endl;
             break;
+
         default:
             cout << "Неверный выбор. Попробуйте снова" << endl;
             break;
@@ -251,5 +279,4 @@ int main() {
 
     return 0;
 }
-    return 0;
-}
+
