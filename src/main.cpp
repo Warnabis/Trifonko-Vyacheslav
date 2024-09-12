@@ -12,7 +12,7 @@ void wait() {
     system("cls");
 }
 
-class subscription {
+class Subscription {
 public:
     int id;
     string name;
@@ -35,15 +35,15 @@ public:
         cout << "Айди: " << id << " Имя: " << name << " Цена: " << price << " Кол-во занятий в услуге: " << days << endl;
     }
 
-    void create(vector<subscription>& services) const {
-        subscription newservice;
+    void create(vector<Subscription>& services) const {
+        Subscription newservice;
         newservice.input();
         services.push_back(newservice);
         cout << "Объект создан\n";
         wait();
     }
 
-    void read(const vector<subscription>& services) const {
+    void read(const vector<Subscription>& services) const {
         if (services.empty()) {
             cout << "Нет объектов для отображения" << endl;
             wait();
@@ -77,7 +77,7 @@ public:
         wait();
     }
 
-    void update(vector<subscription>& services) const {
+    void update(vector<Subscription>& services) const {
         if (services.empty()) {
             cout << "Нет объектов для обновления" << endl;
             return;
@@ -101,7 +101,7 @@ public:
         wait();
     }
 
-    void deletes(vector<subscription>& services) const {
+    void deletes(vector<Subscription>& services) const {
         if (services.empty()) {
             cout << "Нет объектов для удаления" << endl;
             wait();
@@ -118,7 +118,7 @@ public:
         }
         else {
             auto iterator = remove_if(services.begin(), services.end(),
-                [&checkname](const subscription& service) { return service.name == checkname; });
+                [&checkname](const Subscription& service) { return service.name == checkname; });
 
             if (iterator != services.end()) {
                 services.erase(iterator, services.end());
@@ -131,7 +131,7 @@ public:
         wait();
     }
 
-    void workout(vector<subscription>& services, subscription*& selectedservice) const {
+    void workout(vector<Subscription>& services, Subscription*& selectedservice) const {
         if (services.empty()) {
             cout << "Нет доступных услуг для выбора" << endl;
             wait();
@@ -215,9 +215,9 @@ public:
 
 int main() {
     setlocale(LC_ALL, "rus");
-    vector<subscription> services;
-    subscription service;
-    subscription* selectedservice = nullptr;
+    vector<Subscription> services;
+    Subscription service;
+    Subscription* selectedservice = nullptr;
     int choice;
 
     do {
