@@ -12,7 +12,7 @@ void wait() {
     system("cls");
 }
 
-class Subscription {
+class subscription {
 public:
     int id;
     string name;
@@ -34,15 +34,16 @@ public:
     void output() const {
         cout << "Айди: " << id << " Имя: " << name << " Цена: " << price << " Кол-во занятий в услуге: " << days << endl;
     }
-    void create (vector<Subscription>& services) const {
-        Subscription newservice;
+
+    void create(vector<subscription>& services) const {
+        subscription newservice;
         newservice.input();
         services.push_back(newservice);
         cout << "Объект создан\n";
         wait();
     }
 
-    void read (const vector<Subscription>& services) const {
+    void read(const vector<subscription>& services) const {
         if (services.empty()) {
             cout << "Нет объектов для отображения" << endl;
             wait();
@@ -51,7 +52,7 @@ public:
 
         string checkname;
         cout << "Введите название услуги (или \"all\" для отображения всех): ";
-        cin >> checkname;
+            cin >> checkname;
 
         if (checkname == "all") {
             for (size_t i = 0; i < services.size(); i++) {
@@ -76,7 +77,7 @@ public:
         wait();
     }
 
-    void update(vector<Subscription>& services) const {
+    void update(vector<subscription>& services) const {
         if (services.empty()) {
             cout << "Нет объектов для обновления" << endl;
             return;
@@ -100,7 +101,7 @@ public:
         wait();
     }
 
-    void deletes(vector<Subscription>& services) const {
+    void deletes(vector<subscription>& services) const {
         if (services.empty()) {
             cout << "Нет объектов для удаления" << endl;
             wait();
@@ -116,11 +117,11 @@ public:
             cout << "Все объекты удалены" << endl;
         }
         else {
-            auto it = remove_if(services.begin(), services.end(),
-                [&checkname](const Subscription& service) { return service.name == checkname; });
+            auto iterator = remove_if(services.begin(), services.end(),
+                [&checkname](const subscription& service) { return service.name == checkname; });
 
-            if (it != services.end()) {
-                services.erase(it, services.end());
+            if (iterator != services.end()) {
+                services.erase(iterator, services.end());
                 cout << "Услуга \"" << checkname << "\" удалена" << endl;
             }
             else {
@@ -130,7 +131,7 @@ public:
         wait();
     }
 
-    void workout(vector<Subscription>& services, Subscription*& selectedservice) const {
+    void workout(vector<subscription>& services, subscription*& selectedservice) const {
         if (services.empty()) {
             cout << "Нет доступных услуг для выбора" << endl;
             wait();
@@ -138,7 +139,7 @@ public:
         }
 
         if (selectedservice == nullptr) {
-            cout << "Услуга не выбрана. Выберите услугу перед тренировкой" << endl;
+            cout << "Услуга не выбрана.Выберите услугу перед тренировкой" << endl;
 
             string checkname;
             cout << "Введите название услуги для выбора: ";
@@ -214,9 +215,9 @@ public:
 
 int main() {
     setlocale(LC_ALL, "rus");
-    vector<Subscription> services;
-    Subscription service;
-    Subscription* selectedservice = nullptr;
+    vector<subscription> services;
+    subscription service;
+    subscription* selectedservice = nullptr;
     int choice;
 
     do {
