@@ -1,52 +1,49 @@
 #include "Subscription.h"
 #include <iostream>
-#include <memory>
+#include <limits>
 
-using namespace std;
-
-Subscription::Subscription() : id(0), name(""), price(0.0f), days(0) {}
 
 void wait() {
-    cout << "\nНажмите любую клавишу, чтобы продолжить";
-    cin.get();
-    cin.ignore(numeric_limits<streamsize>::max(), '\n');
+    std::cout << "\nНажмите любую клавишу, чтобы продолжить";
+    std::cin.get();
+    std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
     system("cls");
 }
 
 void Subscription::input() {
-    cout << "Введите ID услуги: ";
-    cin >> id;
-    cout << "Введите название услуги: ";
-    cin >> name;
-    cout << "Введите цену услуги: ";
-    cin >> price;
-    cout << "Введите кол-во занятий в услуге: ";
-    cin >> days;
-    cout << endl;
+    std::cout << "Введите ID услуги: ";
+    std::cin >> id;
+    std::cout << "Введите название услуги: ";
+    std::cin >> name;
+    std::cout << "Введите цену услуги: ";
+    std::cin >> price;
+    std::cout << "Введите кол-во занятий в услуге: ";
+    std::cin >> days;
+    std::cout << std::endl;
 }
 
 void Subscription::output() const {
-    cout << "Айди: " << id << " Имя: " << name << " Цена: " << price << " Кол-во занятий в услуге: " << days << endl;
+    std::cout << "Айди: " << id << " Имя: " << name << " Цена: " << price << " Кол-во занятий в услуге: " << days << std::endl;
 }
 
-void Subscription::create(unique_ptr<Subscription[]>& services, int& size) const {
-    auto temp = make_unique<Subscription[]>(size + 1);
+void Subscription::create(std::unique_ptr<Subscription[]>& services, int& size) const {
+    auto temp = std::make_unique<Subscription[]>(size + 1);
 
     for (int i = 0; i < size; i++) {
         temp[i] = services[i];
     }
 
     temp[size].input();
-    services = move(temp);
+    services = std::move(temp);
     size++;
 
-    cout << "Объект создан\n";
+    std::cout << "Объект создан\n";
     wait();
 }
 
-void Subscription::read(const unique_ptr<Subscription[]>& services, int size) const {
+void Subscription::read(std::unique_ptr<Subscription[]>& services, int size) const {
     if (size == 0) {
-        cout << "Нет объектов для отображения" << endl;
+        std::cout << "Нет объектов для отображения" << std::endl;
         wait();
         return;
     }
@@ -57,9 +54,9 @@ void Subscription::read(const unique_ptr<Subscription[]>& services, int size) co
 
     if (checkname == "all") {
         for (int i = 0; i < size; i++) {
-            cout << "Объект " << i + 1 << ": ";
+            std::cout << "Объект " << i + 1 << ": ";
             services[i].output();
-            cout << std::endl;
+            std::cout << std::endl;
         }
     }
     else {
@@ -72,21 +69,21 @@ void Subscription::read(const unique_ptr<Subscription[]>& services, int size) co
             }
         }
         if (!found) {
-           cout << "Услуга с названием \"" << checkname << "\" не найдена." << endl;
+            std::cout << "Услуга с названием \"" << checkname << "\" не найдена." << std::endl;
         }
     }
     wait();
 }
 
-void Subscription::update(unique_ptr<Subscription[]>& services, int size) const {
+void Subscription::update(std::unique_ptr<Subscription[]>& services, int size) const {
     if (size == 0) {
-        cout << "Нет объектов для обновления" << endl;
+        std::cout << "Нет объектов для обновления" << std::endl;
         return;
     }
 
-    string checkname;
-    cout << "Введите название услуги для обновления: ";
-    cin >> checkname;
+    std::string checkname;
+    std::cout << "Введите название услуги для обновления: ";
+    std::cin >> checkname;
 
     bool found = false;
     for (int i = 0; i < size; i++) {
@@ -97,30 +94,30 @@ void Subscription::update(unique_ptr<Subscription[]>& services, int size) const 
         }
     }
     if (!found) {
-        cout << "Услуга с названием \"" << checkname << "\" не найдена" << endl;
+        std::cout << "Услуга с названием \"" << checkname << "\" не найдена" << std::endl;
     }
     wait();
 }
 
-void Subscription::deletes(unique_ptr<Subscription[]>& services, int& size) const {
+void Subscription::deletes(std::unique_ptr<Subscription[]>& services, int& size) const {
     if (size == 0) {
-        cout << "Нет объектов для удаления" << endl;
+        std::cout << "Нет объектов для удаления" << std::endl;
         wait();
         return;
     }
 
-    string checkname;
-    cout << "Введите название услуги для удаления (или \"all\" для удаления всех): ";
-    cin >> checkname;
+    std::string checkname;
+    std::cout << "Введите название услуги для удаления (или \"all\" для удаления всех): ";
+    std::cin >> checkname;
 
     if (checkname == "all") {
         services.reset();
         size = 0;
-        cout << "Все объекты удалены" << endl;
+        std::cout << "Все объекты удалены" << std::endl;
     }
     else {
         bool found = false;
-        auto temp = make_unique<Subscription[]>(size - 1);
+        auto temp = std::make_unique<Subscription[]>(size - 1);
         int index = 0;
 
         for (int i = 0; i < size; i++) {
@@ -133,42 +130,42 @@ void Subscription::deletes(unique_ptr<Subscription[]>& services, int& size) cons
         }
 
         if (found) {
-            services = move(temp);
+            services = std::move(temp);
             size--;
-            cout << "Услуга \"" << checkname << "\" удалена" << endl;
+            std::cout << "Услуга \"" << checkname << "\" удалена" << std::endl;
         }
         else {
-            cout << "Услуга с названием \"" << checkname << "\" не найдена" << endl;
+            std::cout << "Услуга с названием \"" << checkname << "\" не найдена" << std::endl;
         }
     }
     wait();
 }
 
-void Subscription::workout(unique_ptr<Subscription[]>& services, int size, Subscription*& selectedservice) const {
+void Subscription::workout(std::unique_ptr<Subscription[]>& services, int size, Subscription*& selectedservice) const {
     if (size == 0) {
-        cout << "Нет доступных услуг для выбора" << endl;
+        std::cout << "Нет доступных услуг для выбора" << std::endl;
         wait();
         return;
     }
 
     if (selectedservice == nullptr) {
-        cout << "Услуга не выбрана. Выберите услугу перед тренировкой" << endl;
-        string checkname;
-        cout << "Введите название услуги для выбора: ";
-        cin >> checkname;
+        std::cout << "Услуга не выбрана. Выберите услугу перед тренировкой" << std::endl;
+        std::string checkname;
+        std::cout << "Введите название услуги для выбора: ";
+        std::cin >> checkname;
 
         bool found = false;
         for (int i = 0; i < size; i++) {
             if (services[i].name == checkname) {
                 selectedservice = &services[i];
-                cout << "Услуга \"" << selectedservice->name << "\" выбрана." << endl;
+                std::cout << "Услуга \"" << selectedservice->name << "\" выбрана." << std::endl;
                 found = true;
                 break;
             }
         }
 
         if (!found) {
-            cout << "Услуга с названием \"" << checkname << "\" не найдена." << endl;
+            std::cout << "Услуга с названием \"" << checkname << "\" не найдена." << std::endl;
             wait();
             return;
         }
@@ -176,43 +173,43 @@ void Subscription::workout(unique_ptr<Subscription[]>& services, int size, Subsc
 
     int choice;
     do {
-        cout << "\n1. Провести тренировку\n2. Проверить статус тренировки\n3. Отменить текущую услугу\n4. Вернуться в главное меню\nВыберите опцию: ";
-        while (!(cin >> choice)) {
-            cin.clear();
-            cin.ignore(numeric_limits<streamsize>::max(), '\n');
-            cout << "Неверный выбор. Попробуйте снова\nВыберите опцию: ";
+        std::cout << "\n1. Провести тренировку\n2. Проверить статус тренировки\n3. Отменить текущую услугу\n4. Вернуться в главное меню\nВыберите опцию: ";
+        while (!(std::cin >> choice)) {
+            std::cin.clear();
+            std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+            std::cout << "Неверный выбор. Попробуйте снова\nВыберите опцию: ";
         }
 
         switch (choice) {
         case 1:
             if (selectedservice->days > 0) {
                 selectedservice->days--;
-                cout << "Тренировка проведена. Осталось дней: " << selectedservice->days << endl;
+                std::cout << "Тренировка проведена. Осталось дней: " << selectedservice->days << std::endl;
             }
             else {
-                cout << "У этой услуги больше не осталось доступных дней для тренировок" << endl;
+                std::cout << "У этой услуги больше не осталось доступных дней для тренировок" << std::endl;
             }
             wait();
             break;
 
         case 2:
-            cout << "Выбранная услуга: \"" << selectedservice->name << "\"\nОсталось дней: " << selectedservice->days << endl;
+            std::cout << "Выбранная услуга: \"" << selectedservice->name << "\"\nОсталось дней: " << selectedservice->days << std::endl;
             wait();
             break;
 
         case 3:
-            cout << "Выход из услуги \"" << selectedservice->name << "\"." << endl;
+            std::cout << "Выход из услуги \"" << selectedservice->name << "\"." << std::endl;
             selectedservice = nullptr;
             wait();
             return;
 
         case 4:
-            cout << "Возвращение в главное меню..." << endl;
+            std::cout << "Возвращение в главное меню..." << std::endl;
             wait();
             break;
 
         default:
-            cout << "Неверный выбор. Попробуйте снова" << endl;
+            std::cout << "Неверный выбор. Попробуйте снова" << std::endl;
             wait();
             break;
         }
