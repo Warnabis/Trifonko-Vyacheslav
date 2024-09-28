@@ -1,53 +1,57 @@
 #include "Subscription.h"
 #include <iostream>
-#include <memory>
 
-using namespace std;
 
-int chooseOption() {
+int choose() {
     int choice;
-    cout << "\n1. Создать новый объект\n2. Вывести объект(ы)\n3. Обновить объект(ы)\n4. Удалить объект(ы)\n5. Управление тренировками (выбор, тренировка, статус)\n6. Выйти из программы\nВыберите опцию: ";
-    cin >> choice;
-    cout << endl;
+    std::cout << "\n1. Создать новый объект\n"
+        "2. Вывести объект(ы)\n"
+        "3. Обновить объект(ы)\n"
+        "4. Удалить объект(ы)\n"
+        "5. Управление тренировками (выбор, тренировка, статус)\n"
+        "6. Выйти из программы\n"
+        "Выберите опцию: ";
+    std::cin >> choice;
+    std::cout << std::endl;
     return choice;
 }
 
 int main() {
-    setlocale(LC_ALL, "rus");
+    setlocale(LC_ALL, "rus");  
 
-    int size = 0;
-    unique_ptr<Subscription[]> services(new Subscription[0]);
-    Subscription service;
-    Subscription* selectedservice = nullptr;
+    int size = 0;  
+    std::unique_ptr<Subscription[]> services(new Subscription[0]); 
+    Subscription service;  
+    Subscription* selectedservice = nullptr;  
 
     int choice;
     do {
-        choice = chooseOption();
+        choice = choose();  
 
         switch (choice) {
         case 1:
-            service.create(services, size);
+            service.create(services, size); 
             break;
         case 2:
-            service.read(services, size);
+            service.read(services, size);  
             break;
         case 3:
-            service.update(services, size);
+            service.update(services, size);  
             break;
         case 4:
-            service.deletes(services, size);
+            service.deletes(services, size);  
             break;
         case 5:
-            service.workout(services, size, selectedservice);
+            service.workout(services, size, selectedservice);  
             break;
         case 6:
-            cout << "Выход из программы..." << endl;
+            std::cout << "Выход из программы..." << std::endl;  
             break;
         default:
-            cout << "Неверный выбор. Попробуйте снова" << endl;
+            std::cout << "Неверный выбор. Попробуйте снова." << std::endl; 
             break;
         }
-    } while (choice != 6);
+    } while (choice != 6);  
 
     return 0;
 }
