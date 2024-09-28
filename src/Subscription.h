@@ -17,9 +17,9 @@ public:
 
     void create(std::unique_ptr<Subscription[]>& services, int& size) const;
     void read(const Subscription* services, int size) const;
-    void update(std::unique_ptr<Subscription[]>& services, int size) const;
+    void update(const Subscription* services, int size) const;
     void deletes(std::unique_ptr<Subscription[]>& services, int& size) const;
-    void workout(std::unique_ptr<Subscription[]>& services, int size, Subscription*& selectedservice) const;
+    void workout(const Subscription* services, int size, Subscription*& selectedservice) const;
 };
 
 #endif
