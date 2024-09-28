@@ -1,6 +1,5 @@
-#include "Subscription.h"
+#include "Subscription.h" 
 #include <iostream>
-
 
 int choose() {
     int choice;
@@ -17,41 +16,41 @@ int choose() {
 }
 
 int main() {
-    setlocale(LC_ALL, "rus");  
+    setlocale(LC_ALL, "rus");
 
-    int size = 0;  
-    std::unique_ptr<Subscription[]> services(new Subscription[0]); 
-    Subscription service;  
-    Subscription* selectedservice = nullptr;  
+    int size = 0;
+    std::unique_ptr<Subscription[]> services = std::make_unique<Subscription[]>(0);
+    Subscription service;
+    Subscription* selectedservice = nullptr;
 
     int choice;
     do {
-        choice = choose();  
+        choice = choose();
 
         switch (choice) {
         case 1:
-            service.create(services, size); 
+            service.create(services, size);
             break;
         case 2:
-            service.read(services, size);  
+            service.read(services, size);
             break;
         case 3:
-            service.update(services, size);  
+            service.update(services, size);
             break;
         case 4:
-            service.deletes(services, size);  
+            service.deletes(services, size);
             break;
         case 5:
-            service.workout(services, size, selectedservice);  
+            service.workout(services, size, selectedservice);
             break;
         case 6:
-            std::cout << "Выход из программы..." << std::endl;  
+            std::cout << "Выход из программы..." << std::endl;
             break;
         default:
-            std::cout << "Неверный выбор. Попробуйте снова." << std::endl; 
+            std::cout << "Неверный выбор. Попробуйте снова." << std::endl;
             break;
         }
-    } while (choice != 6);  
+    } while (choice != 6);
 
     return 0;
 }
