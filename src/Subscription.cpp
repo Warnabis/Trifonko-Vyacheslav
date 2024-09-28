@@ -142,7 +142,7 @@ void Subscription::deletes(std::unique_ptr<Subscription[]>& services, int& size)
     wait();
 }
 
-void Subscription::workout(const std::unique_ptr<Subscription[]>& services, int size, Subscription*& selectedservice) const {
+void Subscription::workout(std::unique_ptr<Subscription[]>& services, int size, Subscription*& selectedservice) const {
     if (size == 0) {
         std::cout << "Нет доступных услуг для выбора" << std::endl;
         wait();
