@@ -32,7 +32,7 @@ int main() {
             service.create(services, size);
             break;
         case 2:
-            service.read(services, size);
+            service.read(services.get(), size);
             break;
         case 3:
             service.update(services, size);
