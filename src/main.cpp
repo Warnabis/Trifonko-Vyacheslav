@@ -1,15 +1,15 @@
-#include "Subscription.h" 
+#include "Subscription.h"  // Убедитесь, что это имя файла с правильным регистром
 #include <iostream>
 
 int choose() {
     int choice;
     std::cout << "\n1. Создать новый объект\n"
-        "2. Вывести объект(ы)\n"
-        "3. Обновить объект(ы)\n"
-        "4. Удалить объект(ы)\n"
-        "5. Управление тренировками (выбор, тренировка, статус)\n"
-        "6. Выйти из программы\n"
-        "Выберите опцию: ";
+                 "2. Вывести объект(ы)\n"
+                 "3. Обновить объект(ы)\n"
+                 "4. Удалить объект(ы)\n"
+                 "5. Управление тренировками (выбор, тренировка, статус)\n"
+                 "6. Выйти из программы\n"
+                 "Выберите опцию: ";
     std::cin >> choice;
     std::cout << std::endl;
     return choice;
@@ -19,7 +19,7 @@ int main() {
     setlocale(LC_ALL, "rus");
 
     int size = 0;
-    std::unique_ptr<Subscription[]> services = std::make_unique<Subscription[]>(0);
+    auto services = std::make_unique<Subscription[]>(0); // Использование auto для типа
     Subscription service;
     Subscription* selectedservice = nullptr;
 
