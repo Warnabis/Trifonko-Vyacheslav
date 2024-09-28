@@ -41,7 +41,7 @@ void Subscription::create(std::unique_ptr<Subscription[]>& services, int& size) 
     wait();
 }
 
-void Subscription::read(Subscription* services, int size) const {
+void Subscription::read(const Subscription* services, int size) const {
     if (size == 0) {
         std::cout << "Нет объектов для отображения" << std::endl;
         wait();
