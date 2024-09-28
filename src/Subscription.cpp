@@ -75,7 +75,7 @@ void Subscription::read(const Subscription* services, int size) const {
     wait();
 }
 
-void Subscription::update(const Subscription* services, int size) const {
+void Subscription::update(Subscription* services, int size) const {
     if (size == 0) {
         std::cout << "Нет объектов для обновления" << std::endl;
         return;
@@ -142,7 +142,7 @@ void Subscription::deletes(std::unique_ptr<Subscription[]>& services, int& size)
     wait();
 }
 
-void Subscription::workout(const Subscription* services, int size, Subscription*& selectedservice) const {
+void Subscription::workout(Subscription* services, int size, Subscription*& selectedservice) const {
     if (size == 0) {
         std::cout << "Нет доступных услуг для выбора" << std::endl;
         wait();
@@ -216,3 +216,4 @@ void Subscription::workout(const Subscription* services, int size, Subscription*
         }
     } while (choice != 4);
 }
+
