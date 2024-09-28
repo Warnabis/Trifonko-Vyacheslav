@@ -1,4 +1,4 @@
-#include "Subscription.h" 
+#include "Subscription.h"
 #include <iostream>
 #include <limits>
 
@@ -41,7 +41,7 @@ void Subscription::create(std::unique_ptr<Subscription[]>& services, int& size) 
     wait();
 }
 
-void Subscription::read(std::unique_ptr<Subscription[]>& services, int size) const {
+void Subscription::read(const std::unique_ptr<Subscription[]>& services, int size) const {
     if (size == 0) {
         std::cout << "Нет объектов для отображения" << std::endl;
         wait();
@@ -75,7 +75,7 @@ void Subscription::read(std::unique_ptr<Subscription[]>& services, int size) con
     wait();
 }
 
-void Subscription::update(std::unique_ptr<Subscription[]>& services, int size) const {
+void Subscription::update(const std::unique_ptr<Subscription[]>& services, int size) const {
     if (size == 0) {
         std::cout << "Нет объектов для обновления" << std::endl;
         return;
@@ -122,7 +122,8 @@ void Subscription::deletes(std::unique_ptr<Subscription[]>& services, int& size)
 
         for (int i = 0; i < size; i++) {
             if (services[i].name != checkname) {
-                temp[index++] = services[i];
+                index++;
+                temp[index] = services[i];
             }
             else {
                 found = true;
@@ -141,7 +142,7 @@ void Subscription::deletes(std::unique_ptr<Subscription[]>& services, int& size)
     wait();
 }
 
-void Subscription::workout(std::unique_ptr<Subscription[]>& services, int size, Subscription*& selectedservice) const {
+void Subscription::workout(const std::unique_ptr<Subscription[]>& services, int size, Subscription*& selectedservice) const {
     if (size == 0) {
         std::cout << "Нет доступных услуг для выбора" << std::endl;
         wait();
