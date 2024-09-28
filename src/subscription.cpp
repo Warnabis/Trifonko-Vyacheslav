@@ -104,7 +104,7 @@ void Subscription::read(const Subscription* services, int size) const {
     wait();
 }
 
-void Subscription::update(Subscription* services, int size) {
+void Subscription::update(Subscription* services, int size) const {
     if (size == 0) {
         std::cout << "Нет объектов для обновления" << std::endl;
         return;
