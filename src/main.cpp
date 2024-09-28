@@ -1,4 +1,4 @@
-#include "Subscription.h"  // Убедитесь, что это имя файла с правильным регистром
+#include "Subscription.h"  
 #include <iostream>
 
 int choose() {
@@ -19,7 +19,7 @@ int main() {
     setlocale(LC_ALL, "rus");
 
     int size = 0;
-    auto services = std::make_unique<Subscription[]>(0); // Использование auto для типа
+    auto services = std::make_unique<Subscription[]>(0); 
     Subscription service;
     Subscription* selectedservice = nullptr;
 
