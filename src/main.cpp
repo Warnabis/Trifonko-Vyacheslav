@@ -35,13 +35,13 @@ int main() {
             service.read(services.get(), size);
             break;
         case 3:
-            service.update(services, size);
+            service.update(services.get(), size);
             break;
         case 4:
             service.deletes(services, size);
             break;
         case 5:
-            service.workout(services, size, selectedservice);
+            service.workout(services.get(), size, selectedservice);
             break;
         case 6:
             std::cout << "Выход из программы..." << std::endl;
