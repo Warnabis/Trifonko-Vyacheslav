@@ -1,26 +1,28 @@
 #ifndef SUBSCRIPTION_H
 #define SUBSCRIPTION_H
 
-#include <iostream>
+#include <memory>
+#include <string>
+
+using namespace std;
 
 class Subscription {
 public:
     int id;
-    std::string name;
-    double price;
+    string name;
+    float price;
     int days;
 
     Subscription();
+
     void input();
     void output() const;
-    void create(Subscription*& services, int& size);
-    void read(const Subscription* services, int size) const;
-    void update(Subscription* services, int size);
-    void deletes(Subscription*& services, int& size);
-    void workout(Subscription* services, int size, Subscription*& selectedservice) const;
+
+    void create(unique_ptr<Subscription[]>& services, int& size) const;
+    void read(const unique_ptr<Subscription[]>& services, int size) const;
+    void update(unique_ptr<Subscription[]>& services, int size) const;
+    void deletes(unique_ptr<Subscription[]>& services, int& size) const;
+    void workout(unique_ptr<Subscription[]>& services, int size, Subscription*& selectedservice) const;
 };
 
-void wait();
-void choose(int choice, Subscription& service, Subscription*& services, int& size, Subscription*& selectedservice);
-
-#endif
+#endif 
