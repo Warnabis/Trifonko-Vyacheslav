@@ -1,17 +1,19 @@
 #include "Subscription.h"  
 #include <iostream>
 
+using namespace std;
+
 int choose() {
     int choice;
-    std::cout << "\n1. Создать новый объект\n"
-                 "2. Вывести объект(ы)\n"
-                 "3. Обновить объект(ы)\n"
-                 "4. Удалить объект(ы)\n"
-                 "5. Управление тренировками (выбор, тренировка, статус)\n"
-                 "6. Выйти из программы\n"
-                 "Выберите опцию: ";
-    std::cin >> choice;
-    std::cout << std::endl;
+    cout << "\n1. Создать новый объект\n"
+        "2. Вывести объект(ы)\n"
+        "3. Обновить объект(ы)\n"
+        "4. Удалить объект(ы)\n"
+        "5. Управление тренировками (выбор, тренировка, статус)\n"
+        "6. Выйти из программы\n"
+        "Выберите опцию: ";
+    cin >> choice;
+    cout << endl;
     return choice;
 }
 
@@ -19,7 +21,7 @@ int main() {
     setlocale(LC_ALL, "rus");
 
     int size = 0;
-    auto services = std::make_unique<Subscription[]>(0); 
+    auto services = make_unique<Subscription[]>(0);
     Subscription service;
     Subscription* selectedservice = nullptr;
 
@@ -44,10 +46,10 @@ int main() {
             service.workout(services.get(), size, selectedservice);
             break;
         case 6:
-            std::cout << "Выход из программы..." << std::endl;
+            cout << "Выход из программы..." << endl;
             break;
         default:
-            std::cout << "Неверный выбор. Попробуйте снова." << std::endl;
+            cout << "Неверный выбор. Попробуйте снова." << endl;
             break;
         }
     } while (choice != 6);
