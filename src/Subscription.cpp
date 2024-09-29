@@ -7,7 +7,7 @@ using namespace std;
 void wait() {
     cout << "\nНажмите любую клавишу, чтобы продолжить";
     cin.get();
-    cin.ignore(std::numeric_limits<streamsize>::max(), '\n');
+    cin.ignore(numeric_limits<streamsize>::max(), '\n');
     system("cls");
 }
 
@@ -132,7 +132,7 @@ void Subscription::deletes(unique_ptr<Subscription[]>& services, int& size) cons
         }
 
         if (found) {
-            services = std::move(temp);
+            services = move(temp);
             size--;
             cout << "Услуга \"" << checkname << "\" удалена" << endl;
         }
@@ -178,7 +178,7 @@ void Subscription::workout(Subscription* services, int size, Subscription*& sele
         cout << "\n1. Провести тренировку\n2. Проверить статус тренировки\n3. Отменить текущую услугу\n4. Вернуться в главное меню\nВыберите опцию: ";
         while (!(cin >> choice)) {
             cin.clear();
-            cin.ignore(std::numeric_limits<streamsize>::max(), '\n');
+            cin.ignore(numeric_limits<streamsize>::max(), '\n');
             cout << "Неверный выбор. Попробуйте снова\nВыберите опцию: ";
         }
 
