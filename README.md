@@ -3,4 +3,5 @@
 + CRUD-операции для работы с классами;
 + Функции по выбору и использованию услуги спортзала;
 + Использование динамической работы с памятью и потоков ввода-вывода.
++ SonarCloud: https://sonarcloud.io/project/overview?id=Warnabis_Trifonko-Vyacheslav
 
