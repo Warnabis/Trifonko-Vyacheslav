@@ -20,6 +20,9 @@ int choose() {
     return choice;
 }
 
+void saveAllToFile(const Subscription* services, int size);
+int loadAllFromFile(unique_ptr<Subscription[]>& services);
+
 int main() {
     setlocale(LC_ALL, "rus");
 
@@ -27,9 +30,7 @@ int main() {
     auto services = make_unique<Subscription[]>(0);
     Subscription service;
     Subscription* selectedservice = nullptr;
-    void saveAllToFile(const unique_ptr<Subscription[]>&services, int size);
-    int loadAllFromFile(unique_ptr<Subscription[]>&services);
-
+   
     int choice;
     do {
         choice = choose();
@@ -54,7 +55,7 @@ int main() {
             service.compareprices(services.get(), size);
             break;
         case 7:
-            saveAllToFile(services, size);
+            saveAllToFile(services.get(), size);
             break;
         case 8:
             size = loadAllFromFile(services);
