@@ -301,7 +301,7 @@ void saveAllToFile(const Subscription* services, int size) {
         return;
     }
 
-    for (int i = 0; i < size; ++i) {
+    for (int i = 0; i < size; i++) {
         services[i].saveToFile(ofs);
     }
     ofs.close();
