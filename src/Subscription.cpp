@@ -236,7 +236,7 @@ void Subscription::workout(Subscription* services, int size, Subscription*& sele
 }
 
 bool operator==(const Subscription& lhs, const Subscription& rhs) {
-    return lhs.price == rhs.price; 
+     return lhs.price == rhs.price && lhs.id == rhs.id && lhs.days == rhs.days && lhs.name == rhs.name;  
 }
 
 bool operator>(const Subscription& lhs, const Subscription& rhs) {
