@@ -70,7 +70,3 @@ int main() {
 
     return 0;
 }
-    } while (choice != 6);
-
-    return 0;
-}
