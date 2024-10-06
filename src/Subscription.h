@@ -9,9 +9,9 @@ class Subscription {
     int id;
     float price;
     int days;
+    std::string name;
 
 public:
-    std::string name;
 
     void input();
     friend void output(const Subscription& service);
@@ -21,18 +21,15 @@ public:
     void update(Subscription* services, int size) const;
     void deletes(std::unique_ptr<Subscription[]>& services, int& size) const;
     void workout(Subscription* services, int size, Subscription*& selectedservice) const;
-    void compareprices(Subscription* services, int size);
+    void compareprices(Subscription* services, int size) const;
 
     void saveToFile(std::ofstream& ofs) const;
 
     void loadFromFile(std::ifstream& ifs);
 
-    bool operator==(const Subscription& other) const;
-    bool operator>(const Subscription& other) const;
+    friend bool operator==(const Subscription& lhs, const Subscription& rhs);
+    friend bool operator>(const Subscription& lhs, const Subscription& rhs);
     friend std::ostream& operator<<(std::ostream& os, const Subscription& sub);
-
 };
 
 #endif
-
-
