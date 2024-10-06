@@ -21,7 +21,7 @@ public:
     void update(Subscription* services, int size) const;
     void deletes(std::unique_ptr<Subscription[]>& services, int& size) const;
     void workout(Subscription* services, int size, Subscription*& selectedservice) const;
-    void compareprices(Subscription* services, int size) const;
+    void compareprices(const Subscription* services, int size) const;
 
     void saveToFile(std::ofstream& ofs) const;
 
