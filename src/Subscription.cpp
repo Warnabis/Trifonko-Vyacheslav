@@ -235,12 +235,12 @@ void Subscription::workout(Subscription* services, int size, Subscription*& sele
     } while (choice != 4);
 }
 
-bool Subscription::operator==(const Subscription& other) const {
-    return price == other.price;
+bool operator==(const Subscription& lhs, const Subscription& rhs) {
+    return lhs.price == rhs.price; 
 }
 
-bool Subscription::operator>(const Subscription& other) const {
-    return price > other.price;
+bool operator>(const Subscription& lhs, const Subscription& rhs) {
+    return lhs.price > rhs.price; 
 }
 
 ostream& operator<<(ostream& os, const Subscription& service) {
@@ -249,7 +249,7 @@ ostream& operator<<(ostream& os, const Subscription& service) {
     return os;
 }
 
-void Subscription::compareprices(Subscription* services, int size) {
+void Subscription::compareprices(Subscription* services, int size) const {
     if (size < 2) {
         cout << "Для сравнения цен нужно минимум две услуги." << endl;
         wait();
@@ -257,14 +257,15 @@ void Subscription::compareprices(Subscription* services, int size) {
 
     }
 
-    string checkname1, checkname2;
+    string checkname1;
+    string checkname2;
     cout << "Введите название первой услуги: ";
     cin >> checkname1;
     cout << "Введите название второй услуги: ";
     cin >> checkname2;
 
-    Subscription* service1 = nullptr;
-    Subscription* service2 = nullptr;
+    const Subscription* service1 = nullptr;
+    const Subscription* service2 = nullptr;
 
     for (int i = 0; i < size; i++) {
         if (services[i].name == checkname1) {
@@ -292,7 +293,7 @@ void Subscription::compareprices(Subscription* services, int size) {
     wait();
 }
 
-void saveAllToFile(const unique_ptr<Subscription[]>& services, int size) {
+void saveAllToFile(const Subscription* services, int size) {
     ofstream ofs("subscriptions.txt");
     if (!ofs) {
         cout << "Ошибка открытия файла для записи!" << endl;
@@ -318,22 +319,18 @@ int loadAllFromFile(unique_ptr<Subscription[]>& services) {
     int size = 0;
     while (true) {
         auto temp = make_unique<Subscription[]>(size + 1);
-
         if (size > 0) {
             for (int i = 0; i < size; i++) {
                 temp[i] = services[i];
             }
         }
-
         temp[size].loadFromFile(ifs);
-
-        if (ifs.eof()) break;
-
+        if (ifs.eof())
+            break;
         if (ifs.fail()) {
             cout << "Ошибка чтения данных из файла." << endl;
             break;
         }
-
         services = move(temp);
         size++;
     }
