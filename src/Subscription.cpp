@@ -11,6 +11,22 @@ void wait() {
     system("cls");
 }
 
+void Subscription::saveToFile(ofstream& ofs) const {
+    ofs << id << endl;
+    ofs << name << endl;
+    ofs << price << endl;
+    ofs << days << endl;
+}
+
+void Subscription::loadFromFile(ifstream& ifs) {
+    ifs >> id;
+    ifs.ignore(); 
+    getline(ifs, name);
+    ifs >> price;
+    ifs >> days;
+}
+
+
 void Subscription::input() {
     cout << "Введите ID услуги: ";
     cin >> id;
@@ -23,8 +39,8 @@ void Subscription::input() {
     cout << endl;
 }
 
-void Subscription::output() const {
-    cout << "Айди: " << id << " Имя: " << name << " Цена: " << price << " Кол-во занятий в услуге: " << days << endl;
+void output(const Subscription& service) {
+    cout << "Айди: " << service.id << " Имя: " << service.name << " Цена: " << service.price << " Кол-во занятий в услуге: " << service.days << endl;
 }
 
 void Subscription::create(unique_ptr<Subscription[]>& services, int& size) const {
@@ -56,7 +72,7 @@ void Subscription::read(const Subscription* services, int size) const {
     if (checkname == "all") {
         for (int i = 0; i < size; i++) {
             cout << "Объект " << i + 1 << ": ";
-            services[i].output();
+            output(services[i]);
             cout << endl;
         }
     }
@@ -64,7 +80,7 @@ void Subscription::read(const Subscription* services, int size) const {
         bool found = false;
         for (int i = 0; i < size; i++) {
             if (services[i].name == checkname) {
-                services[i].output();
+                output(services[i]);
                 found = true;
                 break;
             }
@@ -75,6 +91,7 @@ void Subscription::read(const Subscription* services, int size) const {
     }
     wait();
 }
+
 
 void Subscription::update(Subscription* services, int size) const {
     if (size == 0) {
@@ -218,3 +235,111 @@ void Subscription::workout(Subscription* services, int size, Subscription*& sele
     } while (choice != 4);
 }
 
+bool Subscription::operator==(const Subscription& other) const {
+    return price == other.price;
+}
+
+bool Subscription::operator>(const Subscription& other) const {
+    return price > other.price;
+}
+
+ostream& operator<<(ostream& os, const Subscription& service) {
+    os << "Айди: " << service.id << ", Имя: " << service.name
+        << ", Цена: " << service.price << ", Кол-во занятий: " << service.days;
+    return os;
+}
+
+void Subscription::compareprices(Subscription* services, int size) {
+    if (size < 2) {
+        cout << "Для сравнения цен нужно минимум две услуги." << endl;
+        wait();
+        return;
+
+    }
+
+    string checkname1, checkname2;
+    cout << "Введите название первой услуги: ";
+    cin >> checkname1;
+    cout << "Введите название второй услуги: ";
+    cin >> checkname2;
+
+    Subscription* service1 = nullptr;
+    Subscription* service2 = nullptr;
+
+    for (int i = 0; i < size; i++) {
+        if (services[i].name == checkname1) {
+            service1 = &services[i];
+        }
+        else if (services[i].name == checkname2) {
+            service2 = &services[i];
+        }
+    }
+
+    if (service1 && service2) {
+        if (*service1 == *service2) {
+            cout << "Услуги \"" << checkname1 << "\" и \"" << checkname2 << "\" имеют одинаковую цену." << endl;
+        }
+        else if (*service1 > *service2) {
+            cout << "Услуга \"" << checkname1 << "\" дороже услуги \"" << checkname2 << "\"." << endl;
+        }
+        else {
+            cout << "Услуга \"" << checkname1 << "\" дешевле услуги \"" << checkname2 << "\"." << endl;
+        }
+    }
+    else {
+        cout << "Одна или обе услуги не найдены." << endl;
+    }
+    wait();
+}
+
+void saveAllToFile(const unique_ptr<Subscription[]>& services, int size) {
+    ofstream ofs("subscriptions.txt");
+    if (!ofs) {
+        cout << "Ошибка открытия файла для записи!" << endl;
+        wait();
+        return;
+    }
+
+    for (int i = 0; i < size; ++i) {
+        services[i].saveToFile(ofs);
+    }
+    ofs.close();
+    cout << "Услуги сохранены в файл subscriptions.txt." << endl;
+    wait();
+}
+
+int loadAllFromFile(unique_ptr<Subscription[]>& services) {
+    ifstream ifs("subscriptions.txt");
+    if (!ifs) {
+        cout << "Ошибка открытия файла для чтения!" << endl;
+        return 0;
+    }
+
+    int size = 0;
+    while (true) {
+        auto temp = make_unique<Subscription[]>(size + 1);
+
+        if (size > 0) {
+            for (int i = 0; i < size; i++) {
+                temp[i] = services[i];
+            }
+        }
+
+        temp[size].loadFromFile(ifs);
+
+        if (ifs.eof()) break;
+
+        if (ifs.fail()) {
+            cout << "Ошибка чтения данных из файла." << endl;
+            break;
+        }
+
+        services = move(temp);
+        size++;
+    }
+
+    ifs.close();
+    cout << "Услуги загружены из файла subscriptions.txt." << endl;
+    wait();
+    return size;
+}
