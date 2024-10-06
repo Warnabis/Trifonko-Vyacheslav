@@ -327,14 +327,11 @@ int loadAllFromFile(unique_ptr<Subscription[]>& services) {
 
         temp[size].loadFromFile(ifs);
 
-        
-        if (ifs.eof() || ifs.fail()) {
-            if (ifs.fail()) {
-                cout << "Ошибка чтения данных из файла." << endl;
-            }
-            break; 
-        }
 
+        if (ifs.eof() ) {
+            break;
+        }
+   
         services = move(temp);
         size++;
     }
