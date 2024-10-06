@@ -236,7 +236,7 @@ void Subscription::workout(Subscription* services, int size, Subscription*& sele
 }
 
 bool operator==(const Subscription& lhs, const Subscription& rhs) {
-     return lhs.price == rhs.price;  
+    return lhs.price == rhs.price; 
 }
 
 bool operator>(const Subscription& lhs, const Subscription& rhs) {
@@ -249,7 +249,7 @@ ostream& operator<<(ostream& os, const Subscription& service) {
     return os;
 }
 
-void Subscription::compareprices(Subscription* services, int size) const {
+void Subscription::compareprices(const Subscription* services, int size) const {
     if (size < 2) {
         cout << "Для сравнения цен нужно минимум две услуги." << endl;
         wait();
@@ -324,13 +324,17 @@ int loadAllFromFile(unique_ptr<Subscription[]>& services) {
                 temp[i] = services[i];
             }
         }
+
         temp[size].loadFromFile(ifs);
-        if (ifs.eof())
-            break;
-        if (ifs.fail()) {
-            cout << "Ошибка чтения данных из файла." << endl;
-            break;
+
+        
+        if (ifs.eof() || ifs.fail()) {
+            if (ifs.fail()) {
+                cout << "Ошибка чтения данных из файла." << endl;
+            }
+            break; 
         }
+
         services = move(temp);
         size++;
     }
