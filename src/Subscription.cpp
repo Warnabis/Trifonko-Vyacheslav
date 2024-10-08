@@ -12,21 +12,6 @@ void wait() {
     system("cls");
 }
 
-bool operator==(const Subscription& lhs, const Subscription& rhs) {
-    return lhs.price == rhs.price;
-}
-
-bool operator>(const Subscription& lhs, const Subscription& rhs) {
-    return lhs.price > rhs.price;
-}
-
-ostream& operator<<(ostream& os, const Subscription& service) {
-    os << "Айди: " << service.id << ", Имя: " << service.name
-        << ", Цена: " << service.price << ", Кол-во занятий: " << service.days;
-    return os;
-}
-
-
 void Subscription::saveToFile(ofstream& ofs) const {
     ofs << id << endl;
     ofs << name << endl;
