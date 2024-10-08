@@ -20,8 +20,8 @@ public:
     void input();
     friend void output(const Subscription& service);
 
-    void saveToFile(std::ofstream& ofs) const;
-    void loadFromFile(std::ifstream& ifs);
+    void savetofile(std::ofstream& ofs) const;
+    void loadfromfile(std::ifstream& ifs);
 
     void create(std::vector<Subscription>& services) const;
     void read(const std::vector<Subscription>& services) const;
