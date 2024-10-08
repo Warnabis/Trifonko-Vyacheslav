@@ -21,8 +21,8 @@ int choose() {
     return choice;
 }
 
-void saveAllToFile(const vector<Subscription>& services);
-size_t loadAllFromFile(vector<Subscription>& services);
+void savealltofile(const vector<Subscription>& services);
+size_t loadallfromfile(vector<Subscription>& services);
 
 int main() {
     setlocale(LC_ALL, "rus");
@@ -56,10 +56,10 @@ int main() {
             service.compareprices(services); 
             break;
         case 7:
-            saveAllToFile(services); 
+            savealltofile(services); 
             break;
         case 8:
-           loadAllFromFile(services);  
+           loadallfromfile(services);  
             break;
         case 9:
             cout << "Выход из программы..." << endl;
