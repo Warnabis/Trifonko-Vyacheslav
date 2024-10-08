@@ -1,8 +1,8 @@
 #ifndef SUBSCRIPTION_H
 #define SUBSCRIPTION_H
 
-#include <memory>
 #include <string>
+#include <vector>
 #include <fstream>
 
 class Subscription {
@@ -12,19 +12,17 @@ class Subscription {
     std::string name;
 
 public:
-
     void input();
     friend void output(const Subscription& service);
 
-    void create(std::unique_ptr<Subscription[]>& services, int& size) const;
-    void read(const Subscription* services, int size) const;
-    void update(Subscription* services, int size) const;
-    void deletes(std::unique_ptr<Subscription[]>& services, int& size) const;
-    void workout(Subscription* services, int size, Subscription*& selectedservice) const;
-    void compareprices(const Subscription* services, int size) const;
+    void create(std::vector<Subscription>& services) const;
+    void read(const std::vector<Subscription>& services) const;
+    void update(std::vector<Subscription>& services) const;
+    void deletes(std::vector<Subscription>& services) const;
+    void workout(std::vector<Subscription>& services, Subscription*& selectedservice) const;
+    void compareprices(const std::vector<Subscription>& services) const;
 
     void saveToFile(std::ofstream& ofs) const;
-
     void loadFromFile(std::ifstream& ifs);
 
     friend bool operator==(const Subscription& lhs, const Subscription& rhs);
