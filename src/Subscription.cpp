@@ -12,14 +12,14 @@ void wait() {
     system("cls");
 }
 
-void Subscription::saveToFile(ofstream& ofs) const {
+void Subscription::savetofile(ofstream& ofs) const {
     ofs << id << endl;
     ofs << name << endl;
     ofs << price << endl;
     ofs << days << endl;
 }
 
-void Subscription::loadFromFile(ifstream& ifs) {
+void Subscription::loadfromfile(ifstream& ifs) {
     ifs >> id;
     ifs.ignore();
     getline(ifs, name);
@@ -40,13 +40,13 @@ void Subscription::input() {
 }
 
 void output(const Subscription& service) {
-    cout << "Айди: " << service.id << " Имя: " << service.name << " Цена: " << service.price << " Кол-во занятий в услуге: " << service.days << endl;
+    cout << endl << "Айди: " << service.id << endl << "Имя: " << service.name << endl << "Цена: " << service.price << endl << "Кол-во занятий в услуге: " << service.days << endl;
 }
 
 void Subscription::create(vector<Subscription>& services) const {
-    Subscription newService;
-    newService.input();
-    services.push_back(newService);
+    Subscription newservice;
+    newservice.input();
+    services.push_back(newservice);
 
     cout << "Объект создан\n";
     wait();
@@ -62,6 +62,7 @@ void Subscription::read(const vector<Subscription>& services) const {
     string checkname;
     cout << "Введите название услуги (или \"all\" для отображения всех): ";
     cin >> checkname;
+    cout << endl;
 
     if (checkname == "all") {
         for (size_t i = 0; i < services.size(); i++) {
@@ -263,7 +264,7 @@ void Subscription::compareprices(const vector<Subscription>& services) const {
     wait();
 }
 
-void saveAllToFile(const vector<Subscription>& services) {
+void savealltofile(const vector<Subscription>& services) {
     ofstream ofs("subscriptions.txt");
     if (!ofs) {
         cout << "Ошибка открытия файла для записи!" << endl;
@@ -272,7 +273,7 @@ void saveAllToFile(const vector<Subscription>& services) {
     }
 
     for (const auto& service : services) {
-        service.saveToFile(ofs);
+        service.savetofile(ofs);
     }
 
     ofs.close();
@@ -280,7 +281,7 @@ void saveAllToFile(const vector<Subscription>& services) {
     wait();
 }
 
-size_t loadAllFromFile(vector<Subscription>& services) { 
+size_t loadallfromfile(vector<Subscription>& services) { 
     ifstream ifs("subscriptions.txt");
     if (!ifs) {
         cout << "Ошибка открытия файла для чтения!" << endl;
@@ -297,7 +298,7 @@ size_t loadAllFromFile(vector<Subscription>& services) {
 
     while (true) {
         Subscription temp;
-        temp.loadFromFile(ifs); 
+        temp.loadfromfile(ifs); 
 
         
         if (ifs.eof()) {
