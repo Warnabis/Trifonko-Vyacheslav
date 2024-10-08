@@ -12,6 +12,21 @@ void wait() {
     system("cls");
 }
 
+bool operator==(const Subscription& lhs, const Subscription& rhs) {
+    return lhs.price == rhs.price;
+}
+
+bool operator>(const Subscription& lhs, const Subscription& rhs) {
+    return lhs.price > rhs.price;
+}
+
+ostream& operator<<(ostream& os, const Subscription& service) {
+    os << "Айди: " << service.id << ", Имя: " << service.name
+        << ", Цена: " << service.price << ", Кол-во занятий: " << service.days;
+    return os;
+}
+
+
 void Subscription::saveToFile(ofstream& ofs) const {
     ofs << id << endl;
     ofs << name << endl;
@@ -215,20 +230,6 @@ void Subscription::workout(vector<Subscription>& services, Subscription*& select
     } while (choice != 4);
 }
 
-bool operator==(const Subscription& lhs, const Subscription& rhs) {
-    return lhs.price == rhs.price;
-}
-
-bool operator>(const Subscription& lhs, const Subscription& rhs) {
-    return lhs.price > rhs.price;
-}
-
-ostream& operator<<(ostream& os, const Subscription& service) {
-    os << "Айди: " << service.id << ", Имя: " << service.name
-        << ", Цена: " << service.price << ", Кол-во занятий: " << service.days;
-    return os;
-}
-
 void Subscription::compareprices(const vector<Subscription>& services) const {
     if (services.size() < 2) {
         cout << "Для сравнения цен нужно минимум две услуги." << endl;
@@ -294,25 +295,27 @@ void saveAllToFile(const vector<Subscription>& services) {
     wait();
 }
 
-int loadAllFromFile(vector<Subscription>& services) {
+size_t loadAllFromFile(vector<Subscription>& services) { 
     ifstream ifs("subscriptions.txt");
     if (!ifs) {
         cout << "Ошибка открытия файла для чтения!" << endl;
         return 0;
     }
 
-    services.clear();  
+    services.clear(); 
+
+    if (ifs.peek() == ifstream::traits_type::eof()) {
+        cout << "Файл subscriptions.txt пуст." << endl;
+        ifs.close();
+        return 0;
+    }
 
     while (true) {
         Subscription temp;
-        temp.loadFromFile(ifs);
+        temp.loadFromFile(ifs); 
 
+        
         if (ifs.eof()) {
-            break;  
-        }
-
-        if (ifs.fail()) {
-            cout << "Ошибка чтения данных из файла." << endl;
             break;
         }
 
@@ -323,5 +326,5 @@ int loadAllFromFile(vector<Subscription>& services) {
     cout << "Услуги загружены из файла subscriptions.txt." << endl;
     wait();
 
-    return services.size();
+    return services.size(); 
 }
