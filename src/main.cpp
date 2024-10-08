@@ -22,12 +22,13 @@ int choose() {
 }
 
 void saveAllToFile(const vector<Subscription>& services);
-int loadAllFromFile(vector<Subscription>& services);
+size_t loadAllFromFile(vector<Subscription>& services);
 
 int main() {
     setlocale(LC_ALL, "rus");
 
-    vector<Subscription> services;  
+    vector<Subscription> services; 
+   
     Subscription service;
     Subscription* selectedservice = nullptr;
 
@@ -58,7 +59,7 @@ int main() {
             saveAllToFile(services); 
             break;
         case 8:
-            loadAllFromFile(services);  
+           loadAllFromFile(services);  
             break;
         case 9:
             cout << "Выход из программы..." << endl;
