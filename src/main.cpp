@@ -1,5 +1,6 @@
-#include "Subscription.h"  
+#include "Subscription.h"
 #include <iostream>
+#include <vector>
 
 using namespace std;
 
@@ -20,45 +21,44 @@ int choose() {
     return choice;
 }
 
-void saveAllToFile(const Subscription* services, int size);
-int loadAllFromFile(unique_ptr<Subscription[]>& services);
+void saveAllToFile(const vector<Subscription>& services);
+int loadAllFromFile(vector<Subscription>& services);
 
 int main() {
     setlocale(LC_ALL, "rus");
 
-    int size = 0;
-    auto services = make_unique<Subscription[]>(0);
+    vector<Subscription> services;  
     Subscription service;
     Subscription* selectedservice = nullptr;
-   
+
     int choice;
     do {
         choice = choose();
 
         switch (choice) {
         case 1:
-            service.create(services, size);
+            service.create(services); 
             break;
         case 2:
-            service.read(services.get(), size);
+            service.read(services); 
             break;
         case 3:
-            service.update(services.get(), size);
+            service.update(services); 
             break;
         case 4:
-            service.deletes(services, size);
+            service.deletes(services); 
             break;
         case 5:
-            service.workout(services.get(), size, selectedservice);
+            service.workout(services, selectedservice); 
             break;
         case 6:
-            service.compareprices(services.get(), size);
+            service.compareprices(services); 
             break;
         case 7:
-            saveAllToFile(services.get(), size);
+            saveAllToFile(services); 
             break;
         case 8:
-            size = loadAllFromFile(services);
+            loadAllFromFile(services);  
             break;
         case 9:
             cout << "Выход из программы..." << endl;
