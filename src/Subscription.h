@@ -39,8 +39,8 @@ public:
     }
 
     friend std::ostream& operator<<(std::ostream& os, const Subscription& sub) {
-        os << "Айди: " << sub.id << ", Имя: " << sub.name
-            << ", Цена: " << sub.price << ", Кол-во занятий: " << sub.days;
+        os << "\n" << "Айди: " << sub.id << "\n" << "Имя: " << sub.name
+            << "\n" << "Цена: " << sub.price << "\n" << "Кол-во занятий: " << sub.days << "\n";
         return os;
     }
 };
