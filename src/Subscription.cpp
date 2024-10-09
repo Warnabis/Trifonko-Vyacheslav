@@ -40,7 +40,7 @@ void Subscription::input() {
 }
 
 void output(const Subscription& service) {
-    cout << endl << "Айди: " << service.id << endl << "Имя: " << service.name << endl << "Цена: " << service.price << endl << "Кол-во занятий в услуге: " << service.days << endl;
+    cout << endl << service;
 }
 
 void Subscription::create(vector<Subscription>& services) const {
