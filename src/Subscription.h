@@ -5,6 +5,7 @@
 #include <iostream>
 #include <fstream>
 #include <vector>
+#include "Functions.h"
 
 class Subscription {
 private:
@@ -17,6 +18,7 @@ public:
     Subscription(int id = 0, float price = 0.0f, int days = 0, const std::string& name = "")
         : id(id), price(price), days(days), name(name) {}
 
+    friend void wait();
     void input();
     friend void output(const Subscription& service);
 
