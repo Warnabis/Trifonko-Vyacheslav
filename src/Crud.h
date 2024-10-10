@@ -15,6 +15,7 @@ public:
     void read(const std::vector<T>& items) const;
     void update(std::vector<T>& items) const;
     void deletes(std::vector<T>& items) const;
+
 };
 
 template <typename T>
@@ -46,7 +47,8 @@ void Crud<T>::read(const std::vector<T>& items) const {
             output(items[i]);
             std::cout << std::endl;
         }
-    } else {
+    }
+    else {
         bool found = false;
         for (const auto& item : items) {
             if (item.getname() == checkname) {
@@ -102,14 +104,16 @@ void Crud<T>::deletes(std::vector<T>& items) const {
     if (checkname == "all") {
         items.clear();
         std::cout << "Все объекты удалены" << std::endl;
-    } else {
+    }
+    else {
         auto it = std::remove_if(items.begin(), items.end(), [&](const T& item) {
             return item.getname() == checkname;
         });
         if (it != items.end()) {
             items.erase(it, items.end());
             std::cout << "Услуга \"" << checkname << "\" удалена" << std::endl;
-        } else {
+        }
+        else {
             std::cout << "Услуга с названием \"" << checkname << "\" не найдена" << std::endl;
         }
     }
