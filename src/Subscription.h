@@ -26,7 +26,7 @@ public:
     void input();
     friend void output(const Subscription& service);
 
-    string getname() const {return name;}
+    std::string getname() const {return name;}
 
     void savetofile(std::ofstream& ofs) const;
     void loadfromfile(std::ifstream& ifs);
@@ -47,27 +47,27 @@ public:
     }
 
     friend std::ostream& operator<<(std::ostream& os, const Subscription& sub) {
-        os << "\n" << "Àéäè: " << sub.id << "\n" << "Èìÿ: " << sub.name
-            << "\n" << "Öåíà: " << sub.price << "\n" << "Êîë-âî çàíÿòèé: " << sub.days << "\n";
+        os << "\n" << "Ã€Ã©Ã¤Ã¨: " << sub.id << "\n" << "ÃˆÃ¬Ã¿: " << sub.name
+            << "\n" << "Ã–Ã¥Ã­Ã : " << sub.price << "\n" << "ÃŠÃ®Ã«-Ã¢Ã® Ã§Ã Ã­Ã¿Ã²Ã¨Ã©: " << sub.days << "\n";
         return os;
     }
     void activate() override {
         if (!activated) { 
             activated = true;
-            std::cout << "Ïîäïèñêà \"" << name << "\" àêòèâèðîâàíà." << std::endl;
+            std::cout << "ÃÃ®Ã¤Ã¯Ã¨Ã±ÃªÃ  \"" << name << "\" Ã ÃªÃ²Ã¨Ã¢Ã¨Ã°Ã®Ã¢Ã Ã­Ã ." << std::endl;
         }
         else {
-            std::cout << "Ïîäïèñêà \"" << name << "\" óæå àêòèâèðîâàíà." << std::endl;
+            std::cout << "ÃÃ®Ã¤Ã¯Ã¨Ã±ÃªÃ  \"" << name << "\" Ã³Ã¦Ã¥ Ã ÃªÃ²Ã¨Ã¢Ã¨Ã°Ã®Ã¢Ã Ã­Ã ." << std::endl;
         }
     }
 
     void deactivate() override {
         if (activated) {
             activated = false;
-            std::cout << "Ïîäïèñêà \"" << name << "\" äåàêòèâèðîâàíà." << std::endl;
+            std::cout << "ÃÃ®Ã¤Ã¯Ã¨Ã±ÃªÃ  \"" << name << "\" Ã¤Ã¥Ã ÃªÃ²Ã¨Ã¢Ã¨Ã°Ã®Ã¢Ã Ã­Ã ." << std::endl;
         }
         else {
-            std::cout << "Ïîäïèñêà \"" << name << "\" óæå äåàêòèâèðîâàíà." << std::endl;
+            std::cout << "ÃÃ®Ã¤Ã¯Ã¨Ã±ÃªÃ  \"" << name << "\" Ã³Ã¦Ã¥ Ã¤Ã¥Ã ÃªÃ²Ã¨Ã¢Ã¨Ã°Ã®Ã¢Ã Ã­Ã ." << std::endl;
         }
     }
 
