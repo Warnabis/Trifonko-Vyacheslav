@@ -7,50 +7,46 @@
 #include <algorithm>
 #include "Functions.h"
 
-using namespace std;
-
 template <typename T>
 class Crud {
 public:
     friend void wait();
-    void create(vector<T>& items) const;
-    void read(const vector<T>& items) const;
-    void update(vector<T>& items) const;
-    void deletes(vector<T>& items) const;
-
+    void create(std::vector<T>& items) const;
+    void read(const std::vector<T>& items) const;
+    void update(std::vector<T>& items) const;
+    void deletes(std::vector<T>& items) const;
 };
 
 template <typename T>
-void Crud<T>::create(vector<T>& items) const {
+void Crud<T>::create(std::vector<T>& items) const {
     T newitem;
     newitem.input();
     items.push_back(newitem);
 
-    cout << "Îáúåêò ñîçäàí\n";
+    std::cout << "ÐžÐ±ÑŠÐµÐºÑ‚ ÑÐ¾Ð·Ð´Ð°Ð½\n";
     wait();
 }
 
 template <typename T>
-void Crud<T>::read(const vector<T>& items) const {
+void Crud<T>::read(const std::vector<T>& items) const {
     if (items.empty()) {
-        cout << "Íåò îáúåêòîâ äëÿ îòîáðàæåíèÿ" << endl;
+        std::cout << "ÐÐµÑ‚ Ð¾Ð±ÑŠÐµÐºÑ‚Ð¾Ð² Ð´Ð»Ñ Ð¾Ñ‚Ð¾Ð±Ñ€Ð°Ð¶ÐµÐ½Ð¸Ñ" << std::endl;
         wait();
         return;
     }
 
-    string checkname;
-    cout << "Ââåäèòå íàçâàíèå óñëóãè (èëè \"all\" äëÿ îòîáðàæåíèÿ âñåõ): ";
-    cin >> checkname;
-    cout << endl;
+    std::string checkname;
+    std::cout << "Ð’Ð²ÐµÐ´Ð¸Ñ‚Ðµ Ð½Ð°Ð·Ð²Ð°Ð½Ð¸Ðµ ÑƒÑÐ»ÑƒÐ³Ð¸ (Ð¸Ð»Ð¸ \"all\" Ð´Ð»Ñ Ð¾Ñ‚Ð¾Ð±Ñ€Ð°Ð¶ÐµÐ½Ð¸Ñ Ð²ÑÐµÑ…): ";
+    std::cin >> checkname;
+    std::cout << std::endl;
 
     if (checkname == "all") {
         for (size_t i = 0; i < items.size(); i++) {
-            cout << "Îáúåêò " << i + 1 << ": ";
+            std::cout << "ÐžÐ±ÑŠÐµÐºÑ‚ " << i + 1 << ": ";
             output(items[i]);
-            cout << endl;
+            std::cout << std::endl;
         }
-    }
-    else {
+    } else {
         bool found = false;
         for (const auto& item : items) {
             if (item.getname() == checkname) {
@@ -60,22 +56,22 @@ void Crud<T>::read(const vector<T>& items) const {
             }
         }
         if (!found) {
-            cout << "Óñëóãà ñ íàçâàíèåì \"" << checkname << "\" íå íàéäåíà." << endl;
+            std::cout << "Ð£ÑÐ»ÑƒÐ³Ð° Ñ Ð½Ð°Ð·Ð²Ð°Ð½Ð¸ÐµÐ¼ \"" << checkname << "\" Ð½Ðµ Ð½Ð°Ð¹Ð´ÐµÐ½Ð°." << std::endl;
         }
     }
     wait();
 }
 
 template <typename T>
-void Crud<T>::update(vector<T>& items) const {
+void Crud<T>::update(std::vector<T>& items) const {
     if (items.empty()) {
-        cout << "Íåò îáúåêòîâ äëÿ îáíîâëåíèÿ" << endl;
+        std::cout << "ÐÐµÑ‚ Ð¾Ð±ÑŠÐµÐºÑ‚Ð¾Ð² Ð´Ð»Ñ Ð¾Ð±Ð½Ð¾Ð²Ð»ÐµÐ½Ð¸Ñ" << std::endl;
         return;
     }
 
-    string checkname;
-    cout << "Ââåäèòå íàçâàíèå óñëóãè äëÿ îáíîâëåíèÿ: ";
-    cin >> checkname;
+    std::string checkname;
+    std::cout << "Ð’Ð²ÐµÐ´Ð¸Ñ‚Ðµ Ð½Ð°Ð·Ð²Ð°Ð½Ð¸Ðµ ÑƒÑÐ»ÑƒÐ³Ð¸ Ð´Ð»Ñ Ð¾Ð±Ð½Ð¾Ð²Ð»ÐµÐ½Ð¸Ñ: ";
+    std::cin >> checkname;
 
     bool found = false;
     for (auto& item : items) {
@@ -86,41 +82,38 @@ void Crud<T>::update(vector<T>& items) const {
         }
     }
     if (!found) {
-        cout << "Óñëóãà ñ íàçâàíèåì \"" << checkname << "\" íå íàéäåíà" << endl;
+        std::cout << "Ð£ÑÐ»ÑƒÐ³Ð° Ñ Ð½Ð°Ð·Ð²Ð°Ð½Ð¸ÐµÐ¼ \"" << checkname << "\" Ð½Ðµ Ð½Ð°Ð¹Ð´ÐµÐ½Ð°" << std::endl;
     }
     wait();
 }
 
 template <typename T>
-void Crud<T>::deletes(vector<T>& items) const {
+void Crud<T>::deletes(std::vector<T>& items) const {
     if (items.empty()) {
-        cout << "Íåò îáúåêòîâ äëÿ óäàëåíèÿ" << endl;
+        std::cout << "ÐÐµÑ‚ Ð¾Ð±ÑŠÐµÐºÑ‚Ð¾Ð² Ð´Ð»Ñ ÑƒÐ´Ð°Ð»ÐµÐ½Ð¸Ñ" << std::endl;
         wait();
         return;
     }
 
-    string checkname;
-    cout << "Ââåäèòå íàçâàíèå óñëóãè äëÿ óäàëåíèÿ (èëè \"all\" äëÿ óäàëåíèÿ âñåõ): ";
-    cin >> checkname;
+    std::string checkname;
+    std::cout << "Ð’Ð²ÐµÐ´Ð¸Ñ‚Ðµ Ð½Ð°Ð·Ð²Ð°Ð½Ð¸Ðµ ÑƒÑÐ»ÑƒÐ³Ð¸ Ð´Ð»Ñ ÑƒÐ´Ð°Ð»ÐµÐ½Ð¸Ñ (Ð¸Ð»Ð¸ \"all\" Ð´Ð»Ñ ÑƒÐ´Ð°Ð»ÐµÐ½Ð¸Ñ Ð²ÑÐµÑ…): ";
+    std::cin >> checkname;
 
     if (checkname == "all") {
         items.clear();
-        cout << "Âñå îáúåêòû óäàëåíû" << endl;
-    }
-    else {
-        auto it = remove_if(items.begin(), items.end(), [&](const T& item) {
+        std::cout << "Ð’ÑÐµ Ð¾Ð±ÑŠÐµÐºÑ‚Ñ‹ ÑƒÐ´Ð°Ð»ÐµÐ½Ñ‹" << std::endl;
+    } else {
+        auto it = std::remove_if(items.begin(), items.end(), [&](const T& item) {
             return item.getname() == checkname;
-            });
+        });
         if (it != items.end()) {
             items.erase(it, items.end());
-            cout << "Óñëóãà \"" << checkname << "\" óäàëåíà" << endl;
-        }
-        else {
-            cout << "Óñëóãà ñ íàçâàíèåì \"" << checkname << "\" íå íàéäåíà" << endl;
+            std::cout << "Ð£ÑÐ»ÑƒÐ³Ð° \"" << checkname << "\" ÑƒÐ´Ð°Ð»ÐµÐ½Ð°" << std::endl;
+        } else {
+            std::cout << "Ð£ÑÐ»ÑƒÐ³Ð° Ñ Ð½Ð°Ð·Ð²Ð°Ð½Ð¸ÐµÐ¼ \"" << checkname << "\" Ð½Ðµ Ð½Ð°Ð¹Ð´ÐµÐ½Ð°" << std::endl;
         }
     }
     wait();
 }
 
-
-#endif 
+#endif
