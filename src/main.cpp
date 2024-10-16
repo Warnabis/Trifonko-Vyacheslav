@@ -1,77 +1,93 @@
-#include "Subscription.h"
-#include "Crud.h"
-#include "Activation.h"
-#include "Functions.h"
 #include <iostream>
+#include <fstream>
+#include <algorithm>
 #include <vector>
+#include "Admin.h"
+#include "User.h"   
+#include "Place.h"
+#include "Subscription.h"
+#include "Functions.h"
 
 using namespace std;
 
-int choose() {
-    int choice;
-    cout << "\n1. Создать новый объект\n"
-        "2. Вывести объект(ы)\n"
-        "3. Обновить объект(ы)\n"
-        "4. Удалить объект(ы)\n"
-        "5. Управление тренировками (выбор, тренировка, статус)\n"
-        "6. Сравнить цены двух услуг\n"
-        "7. Сохранить все услуги в файл\n"
-        "8. Загрузить услуги из файла\n"
-        "9. Выйти из программы\n"
-        "Выберите опцию: ";
-    cin >> choice;
-    cout << endl;
-    return choice;
-}
-
-void savealltofile(const vector<Subscription>& services);
-size_t loadallfromfile(vector<Subscription>& services);
+void loadAllPlacesFromFile(std::vector<Place>& places, const std::vector<Subscription>& existingSubscriptions);
+void saveAllPlacesToFile(const std::vector<Place>& places);
+void loadAllSubscriptionsFromFile(std::vector<Subscription>& subscriptions);
+void saveAllSubscriptionsToFile(const std::vector<Subscription>& subscriptions);
 
 int main() {
     setlocale(LC_ALL, "rus");
+    vector<Place> places;
+    vector<Subscription> subscriptions;
 
-    vector<Subscription> services;
+    char loadFromFile;
+    cout << "Считывать данные из файла? (y/n): ";
+    cin >> loadFromFile;
+    cin.ignore();
 
-    Subscription service;
-    Subscription* selectedservice = nullptr;
+    if (loadFromFile == 'y' || loadFromFile == 'Y') {
+        cout << endl;
+        loadAllSubscriptionsFromFile(subscriptions);
+        loadAllPlacesFromFile(places, subscriptions);
+        wait();
+    }
 
-    int choice;
-    do {
-        choice = choose();
+    int userType;
+    cout << "Выберите тип пользователя:\n";
+    cout << "1. Администратор\n";
+    cout << "2. Обычный пользователь\n";
+    cout << "Ваш выбор: ";
+    cin >> userType;
 
-        switch (choice) {
-        case 1:
-            service.create(services);
-            break;
-        case 2:
-            service.read(services);
-            break;
-        case 3:
-            service.update(services);
-            break;
-        case 4:
-            service.deletes(services);
-            break;
-        case 5:
-            service.workout(services, selectedservice);
-            break;
-        case 6:
-            service.compareprices(services);
-            break;
-        case 7:
-            savealltofile(services);
-            break;
-        case 8:
-            loadallfromfile(services);
-            break;
-        case 9:
-            cout << "Выход из программы..." << endl;
-            break;
-        default:
-            cout << "Неверный выбор. Попробуйте снова." << endl;
-            break;
+    if (userType == 1) {
+        string inputLogin, inputPassword;
+        cout << "Введите логин: ";
+        cin >> inputLogin;
+        cout << "Введите пароль: ";
+        cin >> inputPassword;
+
+        Admin admin;
+
+        if (inputLogin == admin.getLogin() && inputPassword == admin.getPassword()) {
+            cout << "Успешный вход!" << endl;
+            wait();
+            admin.showMenu(places, subscriptions);
+
+            saveAllPlacesToFile(places);
+            saveAllSubscriptionsToFile(subscriptions);
         }
-    } while (choice != 9);
+        else {
+            cout << "Неверный логин или пароль!" << endl;
+            wait();
+           
+        }
+    }
+    else if (userType == 2) {
+        string inputLogin, inputPassword;
+        cout << "Введите логин: ";
+        cin >> inputLogin;
+        cout << "Введите пароль: ";
+        cin >> inputPassword;
+
+        User user;
+
+        if (inputLogin == user.getLogin() && inputPassword == user.getPassword()) {
+            cout << "Успешный вход!" << endl;
+            wait();
+            user.showMenu(places, subscriptions);
+        }
+        else {
+            cout << "Неверный логин или пароль!" << endl;
+            wait();
+           
+        }
+    }
+    else {
+        cout << "Неверный выбор! Программа завершена." << endl;
+        wait();
+    }
 
     return 0;
 }
+
+//admin user files wait

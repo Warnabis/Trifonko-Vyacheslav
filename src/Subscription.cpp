@@ -4,14 +4,14 @@
 
 using namespace std;
 
-void Subscription::savetofile(ofstream& ofs) const {
+void Subscription::saveSubscriptionsToFile(ofstream& ofs) const {
     ofs << id << endl;
     ofs << name << endl;
     ofs << price << endl;
     ofs << days << endl;
 }
 
-void Subscription::loadfromfile(ifstream& ifs) {
+void Subscription::loadSubscriptionsFromFile(ifstream& ifs) {
     ifs >> id;
     ifs.ignore();
     getline(ifs, name);
@@ -36,88 +36,105 @@ void output(const Subscription& service) {
 
 }
 
-void Subscription::workout(vector<Subscription>& services, Subscription*& selectedservice) const {
+void Subscription::create(vector<Subscription>& services) const {
+    Subscription newservice;
+    newservice.input();
+    services.push_back(newservice);
+
+    cout << "Объект создан\n";
+    wait();
+}
+
+void Subscription::read(const vector<Subscription>& services) const {
     if (services.empty()) {
-        cout << "Нет доступных услуг для выбора" << endl;
+        cout << "Нет объектов для отображения" << endl;
         wait();
         return;
     }
 
-    if (selectedservice == nullptr) {
-       cout << "Услуга не выбрана. Выберите услугу перед тренировкой" << endl;
-        string checkname;
-        cout << "Введите название услуги для выбора: ";
-        cin >> checkname;
+    string checkname;
+    cout << "Введите название услуги (или \"all\" для отображения всех): ";
+    cin >> checkname;
+    cout << endl;
 
+    if (checkname == "all") {
+        for (size_t i = 0; i < services.size(); i++) {
+            cout << "Объект " << i + 1 << ": ";
+            output(services[i]);
+            cout << endl;
+        }
+    }
+    else {
         bool found = false;
-        for (auto& service : services) {
+        for (const auto& service : services) {
             if (service.name == checkname) {
-                selectedservice = &service;
-                cout << "Услуга \"" << selectedservice->name << "\" выбрана." << endl;
+                output(service);
                 found = true;
                 break;
             }
         }
-
         if (!found) {
             cout << "Услуга с названием \"" << checkname << "\" не найдена." << endl;
-            wait();
-            return;
         }
     }
-
-    if (!(selectedservice->isactivated())) {
-        cout << "Активация услуги..." << endl;
-        selectedservice->activate();
-    }
-
-    int choice;
-    do {
-        cout << "\n1. Провести тренировку\n2. Проверить статус тренировки\n3. Отменить текущую услугу\n4. Вернуться в главное меню\nВыберите опцию: ";
-        while (!(cin >> choice)) {
-            cin.clear();
-            cin.ignore(numeric_limits<streamsize>::max(), '\n');
-            cout << "Неверный выбор. Попробуйте снова\nВыберите опцию: ";
-        }
-
-        switch (choice) {
-        case 1:
-            if (selectedservice->days > 0) {
-                selectedservice->days--;
-                cout << "Тренировка проведена. Осталось дней: " << selectedservice->days << endl;
-            }
-            else {
-                cout << "У этой услуги больше не осталось доступных дней для тренировок" << endl;
-            }
-            wait();
-            break;
-
-        case 2:
-            cout << "Выбранная услуга: \"" << selectedservice->name << "\"\nОсталось дней: " << selectedservice->days << endl;
-            wait();
-            break;
-
-        case 3:
-            cout << "Выход из услуги \"" << selectedservice->name << "\"." << endl;
-            selectedservice->deactivate();  
-            selectedservice = nullptr;
-            wait();
-            return;
-
-        case 4:
-            cout << "Возвращение в главное меню..." << endl;
-            wait();
-            break;
-
-        default:
-            cout << "Неверный выбор. Попробуйте снова" << endl;
-            wait();
-            break;
-        }
-    } while (choice != 4);
+    wait();
 }
 
-void Subscription::compareprices(const vector<Subscription>& services) const {
+void Subscription::update(vector<Subscription>& services) const {
+    if (services.empty()) {
+        cout << "Нет объектов для обновления" << endl;
+        return;
+    }
+
+    string checkname;
+    cout << "Введите название услуги для обновления: ";
+    cin >> checkname;
+
+    bool found = false;
+    for (auto& service : services) {
+        if (service.name == checkname) {
+            service.input();
+            found = true;
+            break;
+        }
+    }
+    if (!found) {
+        cout << "Услуга с названием \"" << checkname << "\" не найдена" << endl;
+    }
+    wait();
+}
+
+void Subscription::deletes(vector<Subscription>& services) const {
+    if (services.empty()) {
+        cout << "Нет объектов для удаления" << endl;
+        wait();
+        return;
+    }
+
+    string checkname;
+    cout << "Введите название услуги для удаления (или \"all\" для удаления всех): ";
+    cin >> checkname;
+
+    if (checkname == "all") {
+        services.clear();
+        cout << "Все объекты удалены" << endl;
+    }
+    else {
+        auto it = remove_if(services.begin(), services.end(), [&](const Subscription& service) {
+            return service.name == checkname;
+            });
+        if (it != services.end()) {
+            services.erase(it, services.end());
+            cout << "Услуга \"" << checkname << "\" удалена" << endl;
+        }
+        else {
+            cout << "Услуга с названием \"" << checkname << "\" не найдена" << endl;
+        }
+    }
+    wait();
+}
+
+void Subscription::comparePrices(const vector<Subscription>& services) const {
     if (services.size() < 2) {
         cout << "Для сравнения цен нужно минимум две услуги." << endl;
         wait();
@@ -152,7 +169,7 @@ void Subscription::compareprices(const vector<Subscription>& services) const {
         }
         else {
             cout << "Услуга \"" << checkname2 << "\" дороже услуги \"" << checkname1 << "\"." << endl;
-        }
+        }       
     }
     else {
         if (!service1) {
@@ -165,53 +182,39 @@ void Subscription::compareprices(const vector<Subscription>& services) const {
     wait();
 }
 
-void savealltofile(const vector<Subscription>& services) {
+void saveAllSubscriptionsToFile(const vector<Subscription>& subscriptions) {
     ofstream ofs("subscriptions.txt");
     if (!ofs) {
-        cout << "Ошибка открытия файла для записи!" << endl;
-        wait();
+        cout << "Ошибка открытия файла для записи!\n";
         return;
     }
 
-    for (const auto& service : services) {
-        service.savetofile(ofs);
+    for (const auto& sub : subscriptions) {
+        sub.saveSubscriptionsToFile(ofs);
     }
 
     ofs.close();
-    cout << "Услуги сохранены в файл subscriptions.txt." << endl;
-    wait();
+    cout << "Данные о подписках успешно сохранены в файл.\n";
 }
 
-size_t loadallfromfile(vector<Subscription>& services) {
+void loadAllSubscriptionsFromFile(vector<Subscription>& subscriptions) {
     ifstream ifs("subscriptions.txt");
     if (!ifs) {
-        cout << "Ошибка открытия файла для чтения!" << endl;
-        return 0;
+        cout << "Ошибка открытия файла для чтения!\n";
+        return;
     }
 
-    services.clear();
-
-    if (ifs.peek() == ifstream::traits_type::eof()) {
-        cout << "Файл subscriptions.txt пуст." << endl;
-        ifs.close();
-        return 0;
-    }
+    subscriptions.clear();
 
     while (true) {
-        Subscription temp;
-        temp.loadfromfile(ifs);
-
-
+        Subscription tempSub;
+        tempSub.loadSubscriptionsFromFile(ifs);
         if (ifs.eof()) {
             break;
         }
-
-        services.push_back(temp);
+        subscriptions.push_back(tempSub);
     }
 
     ifs.close();
-    cout << "Услуги загружены из файла subscriptions.txt." << endl;
-    wait();
-
-    return services.size();
+    cout << "Данные о подписках загружены из файла.\n";
 }
