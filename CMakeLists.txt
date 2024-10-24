@@ -4,6 +4,6 @@ project(GymService)
 
 set(CMAKE_CXX_STANDARD 11)
 
-add_executable(GymService src/Functions.cpp src/main.cpp src/Subscription.cpp src/Place.cpp src/Person.cpp src/User.cpp src/Admin.cpp)
+add_executable(GymService src/Functions.cpp src/main.cpp src/Subscription.cpp src/Place.cpp src/Person.cpp src/User.cpp src/Admin.cpp src/LimitedSubscription.cpp src/UnlimitedSubscription.cpp src/SubscriptionList.cpp)
 
 include_directories(src/headers)
