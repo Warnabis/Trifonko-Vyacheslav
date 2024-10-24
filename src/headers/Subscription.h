@@ -1,57 +1,54 @@
 #ifndef SUBSCRIPTION_H
 #define SUBSCRIPTION_H
 
-#include <string>
 #include <iostream>
-#include <fstream>
+#include <string>
 #include <vector>
-#include "Functions.h"
-#include "Activation.h"
+#include <memory>
+#include <fstream>
 
+class Activation {
+public:
+    virtual void activate() = 0;
+    virtual void deactivate() = 0;
+    virtual bool isActivated() const = 0;
+    virtual ~Activation() = default;
+};
 
-
-class Subscription : public Activation{
-private:
+class Subscription : public Activation {
+protected:
     int id;
-    float price;
-    int days;
     std::string name;
+    double price;
     bool activated = false;
 
 public:
-    Subscription(int id = 0, float price = 0.0f, int days = 0, const std::string& name = "")
-        : id(id), price(price), days(days), name(name) {}
+    Subscription(int id = 0, const std::string& name = "", float price = 0.0f)
+        : id(id), name(name), price(price) {}
 
-    friend void wait();
-    void input();
-    friend void output(const Subscription& service);
+    virtual ~Subscription() = default;
 
-    
-    void setName(const std::string& name) { this->name = name; }
-    void setPrice(float price) { this->price = price; }
-    void setDays(int days) { this->days = days; }
-    void decrementDays() {
-        if (days > 0) {
-            --days; 
-        }
-    }
+    virtual void display() const = 0;      
+    virtual void decrementDays() = 0;      
+    virtual bool isExpired() const = 0;    
 
     std::string getName() const { return name; }
-    float getPrice() const { return price; }
-    int getDays() const { return days; }
+    double getPrice() const { return price; }
+    int getId() const { return id; }
 
-    void saveSubscriptionsToFile(std::ofstream& ofs) const;
-    void loadSubscriptionsFromFile(std::ifstream& ifs);
-    void loadAllSubscriptionsFromFile(std::vector<Subscription>& subscriptions);
-    void saveAllSubscriptionsToFile(const std::vector<Subscription>& subscriptions);
+    void setId(int newId) {
+        id = newId;
+    }
 
+    void setName(const std::string& newName) {
+        name = newName;
+    }
 
-    void create(std::vector<Subscription>& services) const;
-    void read(const std::vector<Subscription>& services) const;
-    void update(std::vector<Subscription>& services) const;
-    void deletes(std::vector<Subscription>& services) const;
-    void workout(std::vector<Subscription>& services, Subscription*& selectedservice) const;
-    void comparePrices(const std::vector<Subscription>& services) const;
+    void setPrice(double newPrice) {
+        price = newPrice;
+    }
+
+    void comparePrices(const std::vector<std::shared_ptr<Subscription>>& services) const;
 
     friend bool operator==(const Subscription& lhs, const Subscription& rhs) {
         return lhs.price == rhs.price;
@@ -61,14 +58,18 @@ public:
         return lhs.price > rhs.price;
     }
 
-    friend std::ostream& operator<<(std::ostream& os, const Subscription& sub) {
-        os << "\n" << "Айди: " << sub.id << "\n" << "Имя: " << sub.name
-            << "\n" << "Цена: " << sub.price << "\n" << "Кол-во занятий: " << sub.days << "\n";
+    friend std::ostream& operator<<(std::ostream& os, const Subscription& subscription) {
+        os << subscription.id << ' ' << subscription.name << ' ' << subscription.price << ' ';
         return os;
     }
 
+    friend std::istream& operator>>(std::istream& is, Subscription& subscription) {
+        is >> subscription.id >> subscription.name >> subscription.price;
+        return is;
+    }
+
     void activate() override {
-        if (!activated) { 
+        if (!activated) {
             activated = true;
             std::cout << "Подписка \"" << name << "\" активирована." << std::endl;
         }
@@ -90,6 +91,10 @@ public:
     bool isActivated() const override {
         return activated;
     }
+
+    void setActivated(bool status) {
+        activated = status;
+    }
 };
 
-#endif 
+#endif

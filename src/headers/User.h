@@ -1,26 +1,33 @@
 #ifndef USER_H
 #define USER_H
 
+#include <memory>
+#include <vector>
+#include <string>
+#include "Place.h"
 #include "Person.h"
 #include "Subscription.h"
-#include "Place.h"
-#include <vector>
+#include "SubscriptionList.h"
+#include "LimitedSubscription.h"
+#include "UnlimitedSubscription.h"
 
 class User : public Person {
-private:
-    std::vector<Subscription> subscriptions;
-    std::vector<Place> places;
+    SubscriptionList<Subscription> subscriptions;
 
 public:
-    User(const std::string& login = "user", const std::string& password = "user123")
-        : Person(login, password) {}
+   
+    User(const std::string& login = "user", const std::string& password = "user")
+        : Person(login, password) {} 
 
-    void showMenu(const std::vector<Place>& places, const std::vector<Subscription>& subscriptions);
-    void viewSubscriptions(const std::vector<Subscription>& subscriptions) const;
+    using Person::getLogin;    
+    using Person::getPassword; 
+
+    void showMenu(const std::vector<Place>& places, SubscriptionList<Subscription>& subscriptionList);
+    void viewSubscriptions(const SubscriptionList<Subscription>& subscriptionList) const;
     void viewPlaces(const std::vector<Place>& places) const;
-
-    void workout(const std::vector<Place>& places, const std::vector<Subscription>& subscriptions, Subscription*& selectedService) const;
-    void comparePrices(const std::vector<Subscription>& services) const;
+    void workout(const std::vector<Place>& places, const SubscriptionList<Subscription>& subscriptionList, std::shared_ptr<Subscription>& selectedService) const;
+    void comparePrices(const SubscriptionList<Subscription>& subscriptionList) const;
+    void displaySubscriptionDetails(const Subscription& subscription) const;
 };
 
-#endif
+#endif 

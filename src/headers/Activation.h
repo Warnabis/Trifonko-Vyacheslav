@@ -2,6 +2,7 @@
 #define ACTIVATION_H
 
 class Activation {
+    bool activated;
 public:
     virtual ~Activation() = default;
     virtual void activate() = 0;
