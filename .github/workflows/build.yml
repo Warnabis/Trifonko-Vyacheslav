@@ -2,7 +2,7 @@ name: Build
 on:
   push:
     branches:
-      - laba3
+      - laba4
   pull_request:
     types: [opened, synchronize, reopened]
 jobs:
