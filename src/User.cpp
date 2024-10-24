@@ -1,168 +1,256 @@
-
 #include "User.h"
 #include <iostream>
+#include <memory>
+#include <vector>
 
 using namespace std;
 
-void User::showMenu(const std::vector<Place>& places, const std::vector<Subscription>& subscriptions) {
-
-    Subscription* selectedService = nullptr;
+void User::showMenu(const vector<Place>& places, SubscriptionList<Subscription>& subscriptionList) {
     int choice;
+    shared_ptr<Subscription> selectedService;
+
     do {
-        std::cout << "\nМеню пользователя:\n";
-        std::cout << "1. Воспользоваться услугой\n";
-        std::cout << "2. Сравнить цены на услуги\n";
-        std::cout << "3. Просмотреть подписки\n";
-        std::cout << "4. Просмотреть залы\n";
-        std::cout << "5. Выйти\n";
-        std::cout << "Ваш выбор: ";
-        std::cin >> choice;
+        cout << "=============================\n";
+        cout << "Меню пользователя:\n";
+        cout << "=============================\n\n";
+        cout << "1. Просмотреть подписки\n";
+        cout << "2. Выполнить тренировку\n";
+        cout << "3. Сравнить цены подписок\n";
+        cout << "4. Просмотреть места\n";
+        cout << "5. Выход\n";
+        cout << "Выберите опцию: ";
+        cin >> choice;
         system("cls");
 
         switch (choice) {
         case 1:
-            workout(places, subscriptions, selectedService); 
-            
+            viewSubscriptions(subscriptionList);
+            wait();
             break;
         case 2:
-            if (!subscriptions.empty()) {
-                Subscription sub; 
-                sub.comparePrices(subscriptions); 
-            }
-            else {
-                std::cout << "Нет доступных услуг для сравнения." << std::endl;
-                wait();
-            }
-            
+            workout(places, subscriptionList, selectedService);
+            wait();
             break;
         case 3:
-            viewSubscriptions(subscriptions); 
-            
+            comparePrices(subscriptionList);
+            wait();
             break;
         case 4:
-            viewPlaces(places);  
-            
+            viewPlaces(places);
+            wait();
             break;
         case 5:
-            std::cout << "Выход из системы...\n";
+            cout << "Выход из меню.\n";
             wait();
             break;
         default:
-            std::cout << "Неверный выбор, попробуйте снова.\n";
+            cout << "Некорректный выбор. Пожалуйста, попробуйте снова.\n";
             wait();
         }
     } while (choice != 5);
 }
 
-void User::viewSubscriptions(const std::vector<Subscription>& subscriptions) const {
-    std::cout << "Просмотр подписок...\n";
-    for (const auto& sub : subscriptions) {
-        std::cout << sub.getName() << " - Активна: " << (sub.isActivated() ? "Да" : "Нет") << "\n";
+void User::viewSubscriptions(const SubscriptionList<Subscription>& subscriptionList) const {
+    if (subscriptionList.getSubscriptions().empty()) {
+        cout << "У вас нет доступных подписок." << endl;
+        wait();
+        return;
     }
-    wait();
+
+    cout << "=============================\n";
+    cout << "Список ваших подписок:\n";
+    cout << "=============================\n";
+
+    for (const auto& subscription : subscriptionList.getSubscriptions()) {
+        cout << "ID: " << subscription->getId() << "\n";
+        cout << "Название: " << subscription->getName() << "\n";
+        cout << "Цена: " << subscription->getPrice() << " руб.\n";
+
+        if (auto limitedSub = dynamic_pointer_cast<LimitedSubscription>(subscription)) {
+            cout << "Тип: Ограниченная\n";
+            cout << "Оставшиеся занятия: " << limitedSub->getSessions() << "\n";
+        }
+        else {
+            cout << "Тип: Безлимитная\n";
+        }
+
+        cout << "-------------------------\n";
+    }
+
+    cout << "=============================\n";
+   
 }
 
-void User::viewPlaces(const std::vector<Place>& places) const {
-    std::cout << "Просмотр списка залов...\n";
-    for (const auto& place : places) {
-        std::cout << place.getName() << " - Адрес: " << place.getAddress() << " - Работает: " << (place.isActivated() ? "Да" : "Нет") << "\n";
-    }
-    wait();
-}
-
-void User::workout(const std::vector<Place>& places, const std::vector<Subscription>& subscriptions, Subscription*& selectedService) const {
+void User::viewPlaces(const vector<Place>& places) const {
     if (places.empty()) {
-        cout << "Нет доступных залов для выбора." << endl;
+        cout << "Нет доступных мест для просмотра." << endl;
         wait();
         return;
     }
 
-    cout << "Выберите зал для тренировки:\n";
-    for (size_t i = 0; i < places.size(); ++i) {
-        cout << i + 1 << ". " << places[i].getName() << " (" << places[i].getAddress() << ")\n";
+    cout << "Доступные места для тренировок:\n";
+    for (const auto& place : places) {
+        if (!place.getName().empty()) {
+            cout << "Название: " << place.getName() << "\n";
+            cout << "Адрес: " << place.getAddress() << "\n";
+            cout << "Время работы: " << place.getHours() << "\n";
+            cout << "Доступные подписки:\n";
+
+            for (const auto& subscription : place.getSubscriptions()) {
+                cout << "  - " << subscription->getName()
+                    << " (ID: " << subscription->getId()
+                    << ", Цена: " << subscription->getPrice() << " руб.)\n";
+            }
+
+            cout << "-------------------------\n";
+        }
     }
+    
+}
 
-    int placeChoice;
-    cin >> placeChoice;
-
-    if (placeChoice <= 0 || placeChoice > places.size()) {
-        cout << "Неверный выбор зала. Возвращение в главное меню..." << endl;
+void User::workout(const vector<Place>& places, const SubscriptionList<Subscription>& subscriptionList, shared_ptr<Subscription>& selectedService) const {
+    if (subscriptionList.empty()) {
+        cout << "Нет доступных подписок для занятий." << endl;
         wait();
         return;
     }
 
-    cout << "Вы выбрали зал: " << places[placeChoice - 1].getName() << ".\n";
+    cout << "Доступные подписки:\n";
+    subscriptionList.displayAll();
 
-    if (subscriptions.empty()) {
-        cout << "Нет доступных услуг для выбора." << endl;
-        wait();
-        return;
-    }
+    int subscriptionChoice;
+    cout << "Выберите подписку (введите ID подписки): ";
+    cin >> subscriptionChoice;
 
-    string checkname;
-    cout << "Введите название услуги для выбора: ";
-    cin >> checkname;
-
-    bool found = false;
-    for (auto& service : subscriptions) {
-        if (service.getName() == checkname) {
-            selectedService = &const_cast<Subscription&>(service);
-            cout << "Услуга \"" << selectedService->getName() << "\" выбрана." << endl;
-            found = true;
+    for (const auto& subscription : subscriptionList) {
+        if (subscription->getId() == subscriptionChoice) {
+            selectedService = subscription;
             break;
         }
     }
 
-    if (!found) {
-        cout << "Услуга с названием \"" << checkname << "\" не найдена." << endl;
+    if (!selectedService) {
+        cout << "Подписка не найдена." << endl;
         wait();
         return;
     }
 
-    if (!selectedService->isActivated()) {
-        cout << "Активация услуги..." << endl;
-        selectedService->activate();
+    if (places.empty()) {
+        cout << "Нет доступных мест для занятий." << endl;
+        wait();
+        return;
     }
+
+    cout << "Доступные места для занятий:\n";
+    for (const auto& place : places) {
+        cout << place.getName() << " (" << place.getAddress() << ")\n";
+    }
+
+    string placeName;
+    cout << "Введите название места для тренировки: ";
+    cin.ignore();
+    getline(cin, placeName);
+
+    const Place* selectedPlace = nullptr;
+    for (const auto& place : places) {
+        if (place.getName() == placeName) {
+            selectedPlace = &place;
+            break;
+        }
+    }
+
+    if (!selectedPlace) {
+        cout << "Место с названием \"" << placeName << "\" не найдено. Возвращение в главное меню...\n";
+        wait();
+        return;
+    }
+
+    cout << "Вы выбрали место: " << selectedPlace->getName() << ".\n";
 
     int choice;
-    system("cls");
     do {
-        cout << "\n1. Провести тренировку\n2. Проверить статус тренировки\n3. Отменить текущую услугу\n4. Вернуться в главное меню\nВыберите опцию: ";
+        cout << "\n1. Провести тренировку\n2. Проверить статус подписки\n3. Вернуться в главное меню\nВыберите действие: ";
         cin >> choice;
+        system("cls");
 
         switch (choice) {
-        case 1:
-            if (selectedService->getDays() > 0) {
-                selectedService->decrementDays();
-                cout << "Тренировка проведена. Осталось дней: " << selectedService->getDays() << endl;
+        case 1: {
+            if (auto limitedSub = dynamic_cast<LimitedSubscription*>(selectedService.get())) {
+                if (limitedSub->getSessions() > 0) {
+                    limitedSub->decrementSession();
+                    cout << "Занятие успешно проведено.\n";
+                    cout << "Осталось занятий: " << limitedSub->getSessions() << "\n";
+                }
+                else {
+                    cout << "Занятия по этой подписке закончились.\n";
+                }
             }
             else {
-                cout << "У этой услуги больше не осталось доступных дней для тренировок." << endl;
+                cout << "Это безлимитная подписка. Занятие проведено.\n";
             }
-            wait();
-            break;
-
-        case 2:
-            cout << "Выбранная услуга: \"" << selectedService->getName() << "\"\nОсталось дней: " << selectedService->getDays() << endl;
-            wait();
-            break;
-
-        case 3:
-            cout << "Выход из услуги \"" << selectedService->getName() << "\"." << endl;
-            selectedService->deactivate();
-            selectedService = nullptr;
-            wait();
-            return;
-
-        case 4:
-            cout << "Возвращение в главное меню..." << endl;
-            wait();
-            break;
-
-        default:
-            cout << "Неверный выбор. Попробуйте снова." << endl;
             wait();
             break;
         }
-    } while (choice != 4);
+        case 2: {
+            cout << "Информация о подписке: \"" << selectedService->getName() << "\"\n";
+            if (auto limitedSub = dynamic_cast<LimitedSubscription*>(selectedService.get())) {
+                cout << "Осталось занятий: " << limitedSub->getSessions() << "\n";
+            }
+            else {
+                cout << "Подписка безлимитная, занятия не ограничены.\n";
+            }
+            wait();
+            break;
+        }
+        case 3:
+            cout << "Возвращение в главное меню...\n";
+            return;
+        default:
+            cout << "Неверный выбор, попробуйте снова.\n";
+            wait();
+            break;
+        }
+    } while (choice != 3);
+}
+
+void User::comparePrices(const SubscriptionList<Subscription>& subscriptionList) const {
+    if (subscriptionList.size() < 2) {
+        cout << "Для сравнения цен нужно минимум две подписки.\n";
+        wait();
+        return;
+    }
+
+    string name1, name2;
+    cout << "Введите название первой подписки: ";
+    cin >> name1;
+    cout << "Введите название второй подписки: ";
+    cin >> name2;
+
+    shared_ptr<Subscription> sub1 = nullptr;
+    shared_ptr<Subscription> sub2 = nullptr;
+
+    for (const auto& sub : subscriptionList) {
+        if (sub->getName() == name1) {
+            sub1 = sub;
+        }
+        else if (sub->getName() == name2) {
+            sub2 = sub;
+        }
+    }
+
+    if (sub1 && sub2) {
+        if (*sub1 == *sub2) {
+            cout << "Подписки \"" << name1 << "\" и \"" << name2 << "\" имеют одинаковую цену.\n";
+        }
+        else if (*sub1 > *sub2) {
+            cout << "Подписка \"" << name1 << "\" дороже подписки \"" << name2 << "\".\n";
+        }
+        else {
+            cout << "Подписка \"" << name2 << "\" дороже подписки \"" << name1 << "\".\n";
+        }
+    }
+    else {
+        cout << "Одна или обе подписки не найдены.\n";
+    }
+   
 }

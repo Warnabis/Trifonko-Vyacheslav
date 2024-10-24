@@ -1,114 +1,202 @@
 #include "Place.h"
-#include "Subscription.h"
-#include <iostream>
-#include <fstream>
-#include <algorithm>
 
 using namespace std;
 
 void Place::savePlacesToFile(ofstream& ofs) const {
-    ofs << name << endl;
-    ofs << address << endl;
-    ofs << hours << endl;
-    ofs << activated << endl;
-    ofs << subscriptions.size() << endl; // Количество подписок
-    for (const auto& subscription : subscriptions) {
-        ofs << subscription.getName() << endl; // Получаем имя подписки
-    }
-}
-
-
-void Place::loadPlacesFromFile(ifstream& ifs, const std::vector<Subscription>& existingSubscriptions) {
-    getline(ifs, name);
-    getline(ifs, address);
-    getline(ifs, hours);
-    ifs >> activated;
-    size_t subCount;
-    ifs >> subCount;
-    ifs.ignore(); // Игнорируем символ новой строки
-    subscriptions.clear();
-
-    for (size_t i = 0; i < subCount; i++) {
-        string subscriptionName;
-        getline(ifs, subscriptionName);
-
-        // Находим существующую подписку по имени
-        auto it = std::find_if(existingSubscriptions.begin(), existingSubscriptions.end(),
-            [&subscriptionName](const Subscription& sub) {
-                return sub.getName() == subscriptionName;
-            });
-
-        if (it != existingSubscriptions.end()) {
-            // Добавляем найденную подписку в вектор subscriptions
-            subscriptions.push_back(*it);
-        }
-        else {
-            cout << "Подписка с именем " << subscriptionName << " не найдена.\n";
-            return;
-        }
-    }
-}
-
-void Place::create(std::vector<Place>& places, const std::vector<Subscription>& subscriptions) const {
-
-    Place newPlace;
-    std::cout << "Введите название зала: ";
-    std::cin >> newPlace.name;  // Вводим название зала
-
-    std::cout << "Введите адрес зала: ";
-    std::cin >> newPlace.address;  // Вводим адрес зала
-
-    std::cout << "Введите время работы (формат HH:MM-HH:MM): ";
-    std::cin >> newPlace.hours;  // Вводим время работы
-
-    std::cout << "Зал активен? (1 - да, 0 - нет): ";
-    std::cin >> newPlace.activated;
-    cin.ignore();
-
-    // Выбор подписок
-    std::vector<Subscription> selectedSubscriptions;
-    std::string subscriptionName;
-
-    while (true) {
-        std::cout << "Введите название подписки (или 'end' для завершения): ";
-        std::getline(std::cin, subscriptionName);
-
-        if (subscriptionName == "end") {
-            break; // Завершение ввода подписок
-        }
-
-        // Проверяем, существует ли подписка с таким именем
-        auto subIt = std::find_if(subscriptions.begin(), subscriptions.end(),
-            [&subscriptionName](const Subscription& sub) { return sub.getName() == subscriptionName; });
-        if (subIt != subscriptions.end()) {
-            // Если подписка найдена, добавляем ее в вектор выбранных подписок
-            selectedSubscriptions.push_back(*subIt);
-        }
-        else {
-            std::cout << "Подписка с именем '" << subscriptionName << "' не найдена!\n";
-        }
-        cout << "Объект создан\n";
-    }
-
-   
-    // Добавляем подписки в зал
-    newPlace.subscriptions = selectedSubscriptions; // Предполагается, что у вас есть доступ к полю subscriptions
-    places.push_back(newPlace); // Добавляем новый зал в вектор
-}
-
-
-void Place::read(const vector<Place>& places) const {
-    if (places.empty()) {
-        cout << "Нет объектов для отображения." << endl;
+    if (!ofs) {
+        cerr << "Ошибка открытия файла для записи мест!" << endl;
         return;
     }
 
-    for (size_t i = 0; i < places.size(); i++) {
-        cout << "Объект " << i + 1 << ":\n" << places[i] << endl;
+    if (!name.empty() || !address.empty() || !hours.empty() || activated) {
+        ofs << (name.empty() ? "N/A" : name) << "\n"
+            << (address.empty() ? "N/A" : address) << "\n"
+            << (hours.empty() ? "N/A" : hours) << "\n"
+            << (activated ? 1 : 0) << "\n";
+
+        size_t subscriptionCount = subscriptions.size();
+        ofs << subscriptionCount << "\n";
+
+        for (const auto& sub : subscriptions) {
+            if (sub) {
+                ofs << sub->getId() << "\n";
+            }
+        }
+    }
+    else {
+        ofs << "N/A\nN/A\nN/A\n0\n0\n";
     }
 }
 
-void Place::update(vector<Place>& places, const vector<Subscription>& availableSubscriptions) const {
+void Place::loadPlacesFromFile(ifstream& ifs, const vector<shared_ptr<Subscription>>& existingSubscriptions) {
+    if (!ifs) {
+        cerr << "Ошибка открытия файла для чтения мест!" << endl;
+        return;
+    }
+
+    if (!getline(ifs, name)) {
+        cerr << "Ошибка чтения названия зала!" << endl;
+        return;
+    }
+
+    if (!getline(ifs, address)) {
+        cerr << "Ошибка чтения адреса зала!" << endl;
+        return;
+    }
+
+    if (!getline(ifs, hours)) {
+        cerr << "Ошибка чтения часов работы зала!" << endl;
+        return;
+    }
+
+    int activatedInput;
+    if (!(ifs >> activatedInput)) {
+        cerr << "Ошибка чтения состояния активации!" << endl;
+        return;
+    }
+    activated = (activatedInput != 0);
+    ifs.ignore();
+
+    size_t subscriptionCount;
+    if (!(ifs >> subscriptionCount)) {
+        cerr << "Ошибка чтения количества подписок!" << endl;
+        return;
+    }
+    ifs.ignore();
+
+    cout << "Загружается " << subscriptionCount << " подписок для зала " << name << endl;
+
+    subscriptions.clear();
+    for (size_t i = 0; i < subscriptionCount; ++i) {
+        int subscriptionId;
+        if (!(ifs >> subscriptionId)) {
+            cerr << "Ошибка чтения ID подписки!" << endl;
+            break;
+        }
+        ifs.ignore();
+
+        auto it = find_if(existingSubscriptions.begin(), existingSubscriptions.end(),
+            [&subscriptionId](const shared_ptr<Subscription>& sub) {
+                return sub->getId() == subscriptionId;
+            });
+
+        if (it != existingSubscriptions.end()) {
+            subscriptions.push_back(*it);
+        }
+        else {
+            cout << "Подписка с ID " << subscriptionId << " не найдена." << endl;
+        }
+    }
+}
+
+void saveAllPlacesToFile(const vector<Place>& places) {
+    ofstream ofs("places.txt");
+    if (!ofs) {
+        cout << "Ошибка открытия файла для записи!\n";
+        return;
+    }
+
+    for (const auto& place : places) {
+        place.savePlacesToFile(ofs);
+    }
+
+    ofs.close();
+    cout << "Данные о залах сохранены в файл.\n";
+}
+
+void loadAllPlacesFromFile(vector<Place>& places, const vector<shared_ptr<Subscription>>& existingSubscriptions) {
+    ifstream ifs("places.txt");
+    if (!ifs) {
+        cout << "Ошибка открытия файла для чтения!\n";
+        return;
+    }
+
+    places.clear();
+
+    while (!ifs.eof()) {
+        Place tempPlace;
+        tempPlace.loadPlacesFromFile(ifs, existingSubscriptions);
+
+        if (ifs.fail() && !ifs.eof()) {
+            cout << "Ошибка при загрузке зала.\n";
+            break;
+        }
+
+        places.push_back(tempPlace);
+    }
+
+    ifs.close();
+    cout << "Данные о залах загружены из файла.\n";
+}
+
+void Place::create(vector<Place>& places, const SubscriptionList<Subscription>& availableSubscriptions) const {
+    Place newPlace;
+    cout << "Введите название зала: ";
+    cin >> newPlace.name;
+
+    cout << "Введите адрес зала: ";
+    cin >> newPlace.address;
+
+    cout << "Введите время работы: ";
+    cin >> newPlace.hours;
+
+    cout << "Зал активен? (1 - да, 0 - нет): ";
+    cin >> newPlace.activated;
+    cin.ignore();
+
+    vector<shared_ptr<Subscription>> selectedSubscriptions;
+    string subscriptionName;
+
+    while (true) {
+        cout << "Введите название подписки (или 'end' для завершения): ";
+        getline(cin, subscriptionName);
+
+        if (subscriptionName == "end") {
+            break;
+        }
+
+        auto subIt = find_if(availableSubscriptions.getSubscriptions().begin(), availableSubscriptions.getSubscriptions().end(),
+            [&subscriptionName](const shared_ptr<Subscription>& sub) {
+                return sub->getName() == subscriptionName;
+            });
+        if (subIt != availableSubscriptions.getSubscriptions().end()) {
+            selectedSubscriptions.push_back(*subIt);
+        }
+        else {
+            cout << "Подписка с именем '" << subscriptionName << "' не найдена!\n";
+        }
+    }
+
+    newPlace.subscriptions = selectedSubscriptions;
+    places.push_back(newPlace);
+}
+
+void Place::read(const vector<Place>& places) const {
+    if (places.empty()) {
+        cout << "Нет доступных мест для просмотра." << endl;
+        return;
+    }
+
+    cout << "Доступные места для тренировок:\n";
+    for (const auto& place : places) {
+        if (!place.getName().empty()) {
+            cout << "Название: " << place.getName() << "\n";
+            cout << "Адрес: " << place.getAddress() << "\n";
+            cout << "Время работы: " << place.getHours() << "\n";
+            cout << "Доступные подписки:\n";
+
+            for (const auto& subscription : place.getSubscriptions()) {
+                cout << "  - " << subscription->getName()
+                    << " (ID: " << subscription->getId()
+                    << ", Цена: " << subscription->getPrice() << " руб.)\n";
+            }
+
+            cout << "-------------------------\n";
+        }
+    }
+}
+
+void Place::update(vector<Place>& places, const SubscriptionList<Subscription>& availableSubscriptions) const {
     if (places.empty()) {
         cout << "Нет объектов для обновления." << endl;
         return;
@@ -138,20 +226,19 @@ void Place::update(vector<Place>& places, const vector<Subscription>& availableS
     if (!address.empty()) placeToUpdate.setAddress(address);
     if (!hours.empty()) placeToUpdate.setHours(hours);
 
-    // Обновление подписок
     int numSubscriptions;
     cout << "Сколько подписок вы хотите добавить? ";
     cin >> numSubscriptions;
     for (int i = 0; i < numSubscriptions; i++) {
         cout << "Доступные подписки:\n";
-        for (size_t j = 0; j < availableSubscriptions.size(); j++) {
-            cout << j + 1 << ". " << availableSubscriptions[j].getName() << "\n";
+        for (size_t j = 0; j < availableSubscriptions.getSubscriptions().size(); j++) {
+            cout << j + 1 << ". " << availableSubscriptions.getSubscriptions()[j]->getName() << "\n";
         }
         int subIndex;
         cout << "Выберите подписку по номеру: ";
         cin >> subIndex;
-        if (subIndex > 0 && subIndex <= availableSubscriptions.size()) {
-            placeToUpdate.addSubscription(availableSubscriptions[subIndex - 1]);
+        if (subIndex > 0 && subIndex <= availableSubscriptions.getSubscriptions().size()) {
+            placeToUpdate.addSubscription(availableSubscriptions.getSubscriptions()[subIndex - 1]);
         }
         else {
             cout << "Неверный номер подписки." << endl;
@@ -167,56 +254,22 @@ void Place::deletes(vector<Place>& places) const {
         return;
     }
 
-    int index;
-    cout << "Введите номер зала для удаления: ";
-    cin >> index;
+    string name;
+    cout << "Введите название зала для удаления: ";
+    cin.ignore();
+    getline(cin, name);
 
-    if (index <= 0 || index > places.size()) {
-        cout << "Неверный номер зала." << endl;
-        return;
+    auto it = remove_if(places.begin(), places.end(), [&](const Place& place) {
+        return place.getName() == name;
+        });
+
+    if (it != places.end()) {
+        places.erase(it, places.end());
+        cout << "Зал \"" << name << "\" удалён успешно.\n";
     }
-
-    places.erase(places.begin() + (index - 1));
-    cout << "Зал удалён успешно.\n";
+    else {
+        cout << "Зал с названием \"" << name << "\" не найден.\n";
+    }
 }
 
-void saveAllPlacesToFile(const vector<Place>& places) {
-    ofstream ofs("places.txt");
-    if (!ofs) {
-        cout << "Ошибка открытия файла для записи!\n";
-        return;
-    }
 
-    for (const auto& place : places) {
-        place.savePlacesToFile(ofs);
-    }
-
-    ofs.close();
-    cout << "Данные о залах сохранены в файл.\n";
-}
-
-void loadAllPlacesFromFile(std::vector<Place>& places, const std::vector<Subscription>& existingSubscriptions) {
-    std::ifstream ifs("places.txt");
-    if (!ifs) {
-        std::cout << "Ошибка открытия файла для чтения!\n";
-        return;
-    }
-
-    places.clear();
-
-    while (!ifs.eof()) {
-        Place tempPlace;
-        tempPlace.loadPlacesFromFile(ifs, existingSubscriptions);
-
-        // Проверяем, был ли успешно загружен зал
-        if (ifs.fail() && !ifs.eof()) {
-            std::cout << "Ошибка при загрузке зала.\n";
-            break; // Выход из цикла, если произошла ошибка
-        }
-
-        places.push_back(tempPlace);
-    }
-
-    ifs.close();
-    std::cout << "Данные о залах загружены из файла.\n";
-}

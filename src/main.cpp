@@ -1,24 +1,58 @@
 #include <iostream>
 #include <fstream>
-#include <algorithm>
+#include <vector>
+#include <memory> //vivod wait place fulluser updatesub
+#include <iostream>
 #include <vector>
 #include "Admin.h"
-#include "User.h"   
+#include "User.h"
 #include "Place.h"
 #include "Subscription.h"
+#include "LimitedSubscription.h"
+#include "UnlimitedSubscription.h"
+#include "SubscriptionList.h"
 #include "Functions.h"
 
 using namespace std;
 
-void loadAllPlacesFromFile(std::vector<Place>& places, const std::vector<Subscription>& existingSubscriptions);
-void saveAllPlacesToFile(const std::vector<Place>& places);
-void loadAllSubscriptionsFromFile(std::vector<Subscription>& subscriptions);
-void saveAllSubscriptionsToFile(const std::vector<Subscription>& subscriptions);
+void loadAllPlacesFromFile(vector<Place>& places, const vector<shared_ptr<Subscription>>& existingSubscriptions);
+void saveAllPlacesToFile(const vector<Place>& places);
+void loadAllSubscriptionsFromFile(vector<shared_ptr<Subscription>>& subscriptions);
+void saveAllSubscriptionsToFile(const SubscriptionList<Subscription>& subscriptions);
+
+void saveAllSubscriptionsToFile(const SubscriptionList<Subscription>& subscriptions) {
+    ofstream ofs("subscriptions.txt");
+    if (!ofs) {
+        cerr << "Ошибка открытия файла для записи подписок!" << std::endl;
+        return;
+    }
+
+    for (const auto& subscription : subscriptions.getSubscriptions()) {
+        
+        ofs << subscription->getId() << " "
+            << subscription->getName() << " "
+            << subscription->getPrice() << " "
+            << (dynamic_cast<const LimitedSubscription*>(subscription.get()) ? 1 : 2) << " "  
+            << (subscription->isActivated() ? 1 : 0); 
+
+        if (const auto* limitedSub = dynamic_cast<const LimitedSubscription*>(subscription.get())) {
+            ofs << " " << limitedSub->getSessions(); 
+        }
+        else if (const auto* unlimitedSub = dynamic_cast<const UnlimitedSubscription*>(subscription.get())) {
+            ofs << " " << unlimitedSub->getDays(); 
+        }
+
+        ofs << endl; 
+    }
+
+    ofs.close(); 
+}
+
 
 int main() {
     setlocale(LC_ALL, "rus");
     vector<Place> places;
-    vector<Subscription> subscriptions;
+    SubscriptionList<Subscription> subscriptionList;
 
     char loadFromFile;
     cout << "Считывать данные из файла? (y/n): ";
@@ -27,8 +61,8 @@ int main() {
 
     if (loadFromFile == 'y' || loadFromFile == 'Y') {
         cout << endl;
-        loadAllSubscriptionsFromFile(subscriptions);
-        loadAllPlacesFromFile(places, subscriptions);
+        loadAllSubscriptionsFromFile(subscriptionList.getSubscriptions()); 
+        loadAllPlacesFromFile(places, subscriptionList.getSubscriptions()); 
         wait();
     }
 
@@ -51,15 +85,14 @@ int main() {
         if (inputLogin == admin.getLogin() && inputPassword == admin.getPassword()) {
             cout << "Успешный вход!" << endl;
             wait();
-            admin.showMenu(places, subscriptions);
+            admin.showMenu(places, subscriptionList); 
 
             saveAllPlacesToFile(places);
-            saveAllSubscriptionsToFile(subscriptions);
+            saveAllSubscriptionsToFile(subscriptionList); 
         }
         else {
             cout << "Неверный логин или пароль!" << endl;
             wait();
-           
         }
     }
     else if (userType == 2) {
@@ -69,17 +102,17 @@ int main() {
         cout << "Введите пароль: ";
         cin >> inputPassword;
 
+       
         User user;
 
         if (inputLogin == user.getLogin() && inputPassword == user.getPassword()) {
             cout << "Успешный вход!" << endl;
             wait();
-            user.showMenu(places, subscriptions);
+            user.showMenu(places, subscriptionList); 
         }
         else {
             cout << "Неверный логин или пароль!" << endl;
             wait();
-           
         }
     }
     else {
@@ -89,5 +122,3 @@ int main() {
 
     return 0;
 }
-
-//admin user files wait
