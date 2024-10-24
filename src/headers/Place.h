@@ -10,7 +10,6 @@
 #include "Functions.h"
 #include "Subscription.h"
 #include "SubscriptionList.h"
-#include "sqlite3.h"
 
 class Place : public Activation {
 private:
@@ -51,11 +50,11 @@ public:
     void saveAllPlacesToFile(const std::vector<Place>& places);
 
     friend std::ostream& operator<<(std::ostream& os, const Place& place) {
-        os << "Íàçâàíèå: " << place.name << "\n"
-            << "Àäðåñ: " << place.address << "\n"
-            << "×àñû ðàáîòû: " << place.hours << "\n"
-            << "Àêòèâèðîâàí: " << (place.activated ? "Äà" : "Íåò") << "\n"
-            << "Ïîäïèñêè:\n";
+        os << "ÃÃ Ã§Ã¢Ã Ã­Ã¨Ã¥: " << place.name << "\n"
+            << "Ã€Ã¤Ã°Ã¥Ã±: " << place.address << "\n"
+            << "Ã—Ã Ã±Ã» Ã°Ã Ã¡Ã®Ã²Ã»: " << place.hours << "\n"
+            << "Ã€ÃªÃ²Ã¨Ã¢Ã¨Ã°Ã®Ã¢Ã Ã­: " << (place.activated ? "Ã„Ã " : "ÃÃ¥Ã²") << "\n"
+            << "ÃÃ®Ã¤Ã¯Ã¨Ã±ÃªÃ¨:\n";
         for (const auto& sub : place.subscriptions) {
             os << "  - " << sub->getName() << "\n"; 
         }
@@ -63,13 +62,13 @@ public:
     }
 
     friend std::istream& operator>>(std::istream& is, Place& place) {
-        std::cout << "Ââåäèòå íàçâàíèå: ";
+        std::cout << "Ã‚Ã¢Ã¥Ã¤Ã¨Ã²Ã¥ Ã­Ã Ã§Ã¢Ã Ã­Ã¨Ã¥: ";
         is >> place.name;
-        std::cout << "Ââåäèòå àäðåñ: ";
+        std::cout << "Ã‚Ã¢Ã¥Ã¤Ã¨Ã²Ã¥ Ã Ã¤Ã°Ã¥Ã±: ";
         is >> place.address;
-        std::cout << "Ââåäèòå ÷àñû ðàáîòû: ";
+        std::cout << "Ã‚Ã¢Ã¥Ã¤Ã¨Ã²Ã¥ Ã·Ã Ã±Ã» Ã°Ã Ã¡Ã®Ã²Ã»: ";
         is >> place.hours;
-        std::cout << "Àêòèâèðîâàí? (1 - Äà, 0 - Íåò): ";
+        std::cout << "Ã€ÃªÃ²Ã¨Ã¢Ã¨Ã°Ã®Ã¢Ã Ã­? (1 - Ã„Ã , 0 - ÃÃ¥Ã²): ";
         int activatedInput;
         is >> activatedInput;
         place.activated = (activatedInput != 0);
