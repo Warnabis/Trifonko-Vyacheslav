@@ -6,7 +6,7 @@ set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_AUTOMOC ON)
 set(CMAKE_AUTORCC ON)
 set(CMAKE_AUTOUIC ON)
-set(Qt6_DIR "C:/msys64/mingw64/lib/cmake/Qt6")
+set(CMAKE_PREFIX_PATH "C:/msys64/mingw64/lib/cmake/Qt6")
 
 find_package(Qt6 REQUIRED COMPONENTS Core Gui Widgets)
 
