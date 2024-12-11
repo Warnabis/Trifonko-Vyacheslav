@@ -1,0 +1,227 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>AllPlaceInfoWindow</class>
+ <widget class="QWidget" name="AllPlaceInfoWindow">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>450</width>
+    <height>400</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Form</string>
+  </property>
+  <property name="styleSheet">
+   <string notr="true">#AllPlaceInfoWindow {
+    background:white;
+}</string>
+  </property>
+  <widget class="QLabel" name="placeName">
+   <property name="geometry">
+    <rect>
+     <x>120</x>
+     <y>0</y>
+     <width>210</width>
+     <height>31</height>
+    </rect>
+   </property>
+   <property name="font">
+    <font>
+     <family>Artifakt Element Heavy</family>
+     <bold>true</bold>
+    </font>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">QLabel {
+    color: #007BFF;
+}
+</string>
+   </property>
+   <property name="text">
+    <string>Textlabel</string>
+   </property>
+  </widget>
+  <widget class="QLabel" name="placeAddress">
+   <property name="geometry">
+    <rect>
+     <x>115</x>
+     <y>30</y>
+     <width>220</width>
+     <height>31</height>
+    </rect>
+   </property>
+   <property name="font">
+    <font>
+     <family>Artifakt Element Heavy</family>
+     <bold>true</bold>
+    </font>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">QLabel {
+    color: #007BFF;
+}
+</string>
+   </property>
+   <property name="text">
+    <string>TextLabel</string>
+   </property>
+  </widget>
+  <widget class="QLabel" name="placeHours">
+   <property name="geometry">
+    <rect>
+     <x>100</x>
+     <y>90</y>
+     <width>250</width>
+     <height>31</height>
+    </rect>
+   </property>
+   <property name="font">
+    <font>
+     <family>Artifakt Element Heavy</family>
+     <bold>true</bold>
+    </font>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">QLabel {
+    color: #007BFF;
+}
+</string>
+   </property>
+   <property name="text">
+    <string>TextLabel</string>
+   </property>
+  </widget>
+  <widget class="QLabel" name="placeActivationStatus">
+   <property name="geometry">
+    <rect>
+     <x>85</x>
+     <y>60</y>
+     <width>280</width>
+     <height>31</height>
+    </rect>
+   </property>
+   <property name="font">
+    <font>
+     <family>Artifakt Element Heavy</family>
+     <bold>true</bold>
+    </font>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">QLabel {
+    color: #007BFF;
+}
+</string>
+   </property>
+   <property name="text">
+    <string>TextLabel</string>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="buySubscriptionButton">
+   <property name="enabled">
+    <bool>true</bool>
+   </property>
+   <property name="geometry">
+    <rect>
+     <x>145</x>
+     <y>350</y>
+     <width>160</width>
+     <height>41</height>
+    </rect>
+   </property>
+   <property name="sizePolicy">
+    <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+     <horstretch>0</horstretch>
+     <verstretch>0</verstretch>
+    </sizepolicy>
+   </property>
+   <property name="font">
+    <font>
+     <family>Artifakt Element Heavy</family>
+     <pointsize>8</pointsize>
+     <bold>true</bold>
+    </font>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">QPushButton {
+    background-color: #007BFF;
+    color: white;
+ border: 2px solid white;
+    border-radius: 8px;
+    padding: 10px 20px;
+}
+QPushButton:hover {
+    background-color: #0056b3;
+}
+
+QPushButton:enabled {
+    background-color: #007BFF; 
+}
+
+QPushButton:enabled:hover {
+    background-color: #0056b3; 
+}
+
+QPushButton:disabled {
+    background-color: #0056b3; 
+    color: white; 
+}</string>
+   </property>
+   <property name="text">
+    <string>Купить подписку</string>
+   </property>
+  </widget>
+  <widget class="QListWidget" name="subsWidget">
+   <property name="geometry">
+    <rect>
+     <x>110</x>
+     <y>160</y>
+     <width>240</width>
+     <height>181</height>
+    </rect>
+   </property>
+   <property name="font">
+    <font>
+     <family>Artifakt Element Heavy</family>
+     <bold>true</bold>
+    </font>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">#subsWidget {
+    color: #007BFF;
+    border: 2px solid #007BFF; 
+    border-radius: 4px; 
+    border-bottom: 2px solid #007BFF;
+}</string>
+   </property>
+  </widget>
+  <widget class="QLabel" name="label">
+   <property name="geometry">
+    <rect>
+     <x>130</x>
+     <y>130</y>
+     <width>190</width>
+     <height>31</height>
+    </rect>
+   </property>
+   <property name="font">
+    <font>
+     <family>Artifakt Element Heavy</family>
+     <bold>true</bold>
+    </font>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">QLabel {
+    color: #007BFF;
+}
+</string>
+   </property>
+   <property name="text">
+    <string>Список имеющихся подписок:</string>
+   </property>
+  </widget>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>

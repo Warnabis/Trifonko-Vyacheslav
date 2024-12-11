@@ -1,0 +1,712 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>MainMenuWindow</class>
+ <widget class="QWidget" name="MainMenuWindow">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>800</width>
+    <height>600</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Form</string>
+  </property>
+  <property name="styleSheet">
+   <string notr="true">QWidget {
+    background: white;
+}
+</string>
+  </property>
+  <widget class="QWidget" name="menuWidget" native="true">
+   <property name="geometry">
+    <rect>
+     <x>600</x>
+     <y>15</y>
+     <width>190</width>
+     <height>491</height>
+    </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">#menuWidget {
+    border: 2px solid #007BFF; 
+    border-radius: 8px; 
+    background: white;
+}
+</string>
+   </property>
+   <widget class="QLabel" name="loginLabel">
+    <property name="geometry">
+     <rect>
+      <x>35</x>
+      <y>50</y>
+      <width>120</width>
+      <height>21</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <family>Artifakt Element Heavy</family>
+      <bold>true</bold>
+     </font>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">QLabel {
+    color: #007BFF;
+    border: 2px solid #007BFF; 
+    border-radius: 8px; 
+}
+</string>
+    </property>
+    <property name="text">
+     <string>TextLabel</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="balanceLabel">
+    <property name="geometry">
+     <rect>
+      <x>35</x>
+      <y>90</y>
+      <width>121</width>
+      <height>21</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <family>Artifakt Element Heavy</family>
+      <bold>true</bold>
+     </font>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">QLabel {
+    color: #007BFF;
+    border: 2px solid #007BFF; 
+    border-radius: 8px; 
+}
+</string>
+    </property>
+    <property name="text">
+     <string>TextLabel</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="addBalanceButton">
+    <property name="geometry">
+     <rect>
+      <x>160</x>
+      <y>88</y>
+      <width>25</width>
+      <height>25</height>
+     </rect>
+    </property>
+    <property name="sizePolicy">
+     <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+      <horstretch>0</horstretch>
+      <verstretch>0</verstretch>
+     </sizepolicy>
+    </property>
+    <property name="font">
+     <font>
+      <family>Artifakt Element Heavy</family>
+      <bold>true</bold>
+     </font>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">QPushButton {
+    background-color: rgba(255, 255, 255, 0.8); 
+    color: #007BFF; 
+    border: 2px solid #007BFF; 
+    border-radius: 8px; 
+    padding: 10px 20px;
+}
+
+QPushButton:hover {
+    background-color: rgba(200, 200, 200, 0.5); 
+}
+</string>
+    </property>
+    <property name="text">
+     <string/>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="subscriptionListButton">
+    <property name="enabled">
+     <bool>true</bool>
+    </property>
+    <property name="geometry">
+     <rect>
+      <x>13</x>
+      <y>130</y>
+      <width>165</width>
+      <height>51</height>
+     </rect>
+    </property>
+    <property name="sizePolicy">
+     <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+      <horstretch>0</horstretch>
+      <verstretch>0</verstretch>
+     </sizepolicy>
+    </property>
+    <property name="font">
+     <font>
+      <family>Artifakt Element Heavy</family>
+      <pointsize>7</pointsize>
+      <bold>true</bold>
+     </font>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">QPushButton {
+    background-color: #007BFF;
+    color: white;
+ border: 2px solid white;
+    border-radius: 8px;
+    padding: 10px 20px;
+}
+QPushButton:hover {
+    background-color: #0056b3;
+}</string>
+    </property>
+    <property name="text">
+     <string>Список приобретённых
+ подписок</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="markSubscriptionButton">
+    <property name="enabled">
+     <bool>true</bool>
+    </property>
+    <property name="geometry">
+     <rect>
+      <x>13</x>
+      <y>195</y>
+      <width>165</width>
+      <height>51</height>
+     </rect>
+    </property>
+    <property name="sizePolicy">
+     <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+      <horstretch>0</horstretch>
+      <verstretch>0</verstretch>
+     </sizepolicy>
+    </property>
+    <property name="font">
+     <font>
+      <family>Artifakt Element Heavy</family>
+      <pointsize>8</pointsize>
+      <bold>true</bold>
+     </font>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">QPushButton {
+    background-color: #007BFF;
+    color: white;
+ border: 2px solid white;
+    border-radius: 8px;
+    padding: 10px 20px;
+}
+QPushButton:hover {
+    background-color: #0056b3;
+}</string>
+    </property>
+    <property name="text">
+     <string>Отметить занятие
+ в подписке</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="cancelSubscriptionButton">
+    <property name="enabled">
+     <bool>true</bool>
+    </property>
+    <property name="geometry">
+     <rect>
+      <x>13</x>
+      <y>260</y>
+      <width>165</width>
+      <height>51</height>
+     </rect>
+    </property>
+    <property name="sizePolicy">
+     <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+      <horstretch>0</horstretch>
+      <verstretch>0</verstretch>
+     </sizepolicy>
+    </property>
+    <property name="font">
+     <font>
+      <family>Artifakt Element Heavy</family>
+      <pointsize>8</pointsize>
+      <bold>true</bold>
+     </font>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">QPushButton {
+    background-color: #007BFF;
+    color: white;
+ border: 2px solid white;
+    border-radius: 8px;
+    padding: 10px 20px;
+}
+QPushButton:hover {
+    background-color: #0056b3;
+}</string>
+    </property>
+    <property name="text">
+     <string>Отменить подписку</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="adminButton">
+    <property name="enabled">
+     <bool>false</bool>
+    </property>
+    <property name="geometry">
+     <rect>
+      <x>13</x>
+      <y>320</y>
+      <width>165</width>
+      <height>41</height>
+     </rect>
+    </property>
+    <property name="sizePolicy">
+     <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+      <horstretch>0</horstretch>
+      <verstretch>0</verstretch>
+     </sizepolicy>
+    </property>
+    <property name="font">
+     <font>
+      <family>Artifakt Element Heavy</family>
+      <pointsize>8</pointsize>
+      <bold>true</bold>
+     </font>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">QPushButton {
+    background-color: #007BFF;
+    color: white;
+ border: 2px solid white;
+    border-radius: 8px;
+    padding: 10px 20px;
+}
+QPushButton:hover {
+    background-color: #0056b3;
+}
+
+QPushButton:enabled {
+    background-color: #007BFF; 
+}
+
+QPushButton:enabled:hover {
+    background-color: #0056b3; 
+}
+
+QPushButton:disabled {
+    background-color: #0056b3; 
+    color: white; 
+}</string>
+    </property>
+    <property name="text">
+     <string>Для администаторов</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label">
+    <property name="geometry">
+     <rect>
+      <x>70</x>
+      <y>375</y>
+      <width>71</width>
+      <height>41</height>
+     </rect>
+    </property>
+    <property name="sizePolicy">
+     <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+      <horstretch>0</horstretch>
+      <verstretch>0</verstretch>
+     </sizepolicy>
+    </property>
+    <property name="font">
+     <font>
+      <family>Artifakt Element Heavy</family>
+      <pointsize>8</pointsize>
+      <italic>false</italic>
+      <bold>true</bold>
+      <underline>false</underline>
+     </font>
+    </property>
+    <property name="cursor">
+     <cursorShape>ArrowCursor</cursorShape>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">QLabel {
+    color: #007BFF;
+}
+</string>
+    </property>
+    <property name="frameShape">
+     <enum>QFrame::Shape::NoFrame</enum>
+    </property>
+    <property name="text">
+     <string>Выйти из
+аккаунта</string>
+    </property>
+    <property name="textFormat">
+     <enum>Qt::TextFormat::PlainText</enum>
+    </property>
+    <property name="alignment">
+     <set>Qt::AlignmentFlag::AlignCenter</set>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="returnToMainButton">
+    <property name="geometry">
+     <rect>
+      <x>140</x>
+      <y>375</y>
+      <width>41</width>
+      <height>41</height>
+     </rect>
+    </property>
+    <property name="sizePolicy">
+     <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+      <horstretch>0</horstretch>
+      <verstretch>0</verstretch>
+     </sizepolicy>
+    </property>
+    <property name="font">
+     <font>
+      <family>Artifakt Element Heavy</family>
+      <bold>true</bold>
+     </font>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">QPushButton {
+    background-color: rgba(255, 255, 255, 0.8); 
+    color: #007BFF; 
+    border: 2px solid #007BFF; 
+    border-radius: 8px; 
+    padding: 10px 20px;
+}
+
+QPushButton:hover {
+    background-color: rgba(200, 200, 200, 0.5); 
+}
+</string>
+    </property>
+    <property name="text">
+     <string/>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label_2">
+    <property name="geometry">
+     <rect>
+      <x>78</x>
+      <y>435</y>
+      <width>71</width>
+      <height>31</height>
+     </rect>
+    </property>
+    <property name="sizePolicy">
+     <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+      <horstretch>0</horstretch>
+      <verstretch>0</verstretch>
+     </sizepolicy>
+    </property>
+    <property name="font">
+     <font>
+      <family>Artifakt Element Heavy</family>
+      <pointsize>8</pointsize>
+      <italic>false</italic>
+      <bold>true</bold>
+      <underline>false</underline>
+     </font>
+    </property>
+    <property name="cursor">
+     <cursorShape>ArrowCursor</cursorShape>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">QLabel {
+    color: #007BFF;
+}
+</string>
+    </property>
+    <property name="frameShape">
+     <enum>QFrame::Shape::NoFrame</enum>
+    </property>
+    <property name="text">
+     <string>Выйти</string>
+    </property>
+    <property name="textFormat">
+     <enum>Qt::TextFormat::PlainText</enum>
+    </property>
+    <property name="alignment">
+     <set>Qt::AlignmentFlag::AlignCenter</set>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="exitButton">
+    <property name="geometry">
+     <rect>
+      <x>140</x>
+      <y>430</y>
+      <width>41</width>
+      <height>41</height>
+     </rect>
+    </property>
+    <property name="sizePolicy">
+     <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+      <horstretch>0</horstretch>
+      <verstretch>0</verstretch>
+     </sizepolicy>
+    </property>
+    <property name="font">
+     <font>
+      <family>Artifakt Element Heavy</family>
+      <bold>true</bold>
+     </font>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">QPushButton {
+    background-color: rgba(255, 255, 255, 0.8); 
+    color: #007BFF; 
+    border: 2px solid #007BFF; 
+    border-radius: 8px; 
+    padding: 10px 20px;
+}
+
+QPushButton:hover {
+    background-color: rgba(200, 200, 200, 0.5); 
+}
+</string>
+    </property>
+    <property name="text">
+     <string/>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="hideMenu">
+    <property name="enabled">
+     <bool>true</bool>
+    </property>
+    <property name="geometry">
+     <rect>
+      <x>160</x>
+      <y>0</y>
+      <width>30</width>
+      <height>30</height>
+     </rect>
+    </property>
+    <property name="sizePolicy">
+     <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+      <horstretch>0</horstretch>
+      <verstretch>0</verstretch>
+     </sizepolicy>
+    </property>
+    <property name="font">
+     <font>
+      <family>Artifakt Element Heavy</family>
+      <bold>true</bold>
+     </font>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">QPushButton {
+    background-color: rgba(255, 255, 255, 0.8); 
+    color: #007BFF; 
+    border: 2px solid #007BFF; 
+    border-radius: 8px; 
+    padding: 10px 20px;
+}
+
+QPushButton:hover {
+    background-color: rgba(200, 200, 200, 0.5); 
+}
+</string>
+    </property>
+    <property name="text">
+     <string/>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="changeAccountInfo">
+    <property name="geometry">
+     <rect>
+      <x>160</x>
+      <y>48</y>
+      <width>25</width>
+      <height>25</height>
+     </rect>
+    </property>
+    <property name="sizePolicy">
+     <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+      <horstretch>0</horstretch>
+      <verstretch>0</verstretch>
+     </sizepolicy>
+    </property>
+    <property name="font">
+     <font>
+      <family>Artifakt Element Heavy</family>
+      <bold>true</bold>
+     </font>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">QPushButton {
+    background-color: rgba(255, 255, 255, 0.8); 
+    color: #007BFF; 
+    border: 2px solid #007BFF; 
+    border-radius: 8px; 
+    padding: 10px 20px;
+}
+
+QPushButton:hover {
+    background-color: rgba(200, 200, 200, 0.5); 
+}
+</string>
+    </property>
+    <property name="text">
+     <string/>
+    </property>
+   </widget>
+  </widget>
+  <widget class="QLabel" name="label_3">
+   <property name="geometry">
+    <rect>
+     <x>245</x>
+     <y>20</y>
+     <width>310</width>
+     <height>81</height>
+    </rect>
+   </property>
+   <property name="sizePolicy">
+    <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+     <horstretch>0</horstretch>
+     <verstretch>0</verstretch>
+    </sizepolicy>
+   </property>
+   <property name="font">
+    <font>
+     <family>Artifakt Element Heavy</family>
+     <pointsize>22</pointsize>
+     <italic>false</italic>
+     <bold>true</bold>
+     <underline>false</underline>
+    </font>
+   </property>
+   <property name="cursor">
+    <cursorShape>ArrowCursor</cursorShape>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">QLabel {
+    color: #007BFF;
+}
+</string>
+   </property>
+   <property name="frameShape">
+    <enum>QFrame::Shape::NoFrame</enum>
+   </property>
+   <property name="text">
+    <string>Список
+ доступных залов</string>
+   </property>
+   <property name="textFormat">
+    <enum>Qt::TextFormat::PlainText</enum>
+   </property>
+   <property name="alignment">
+    <set>Qt::AlignmentFlag::AlignCenter</set>
+   </property>
+  </widget>
+  <widget class="QListWidget" name="placeWidget">
+   <property name="geometry">
+    <rect>
+     <x>210</x>
+     <y>120</y>
+     <width>380</width>
+     <height>411</height>
+    </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">#placeWidget {
+    color: #007BFF;
+    border: 2px solid #007BFF; 
+    border-radius: 8px; 
+}
+
+#placeWidget QScrollBar:vertical {
+    border: none;
+    background: #E0F3FF; 
+    width: 12px;         
+    margin: 0px 0px 0px 0px; 
+}
+
+#placeWidget QScrollBar::handle:vertical {
+    background: #007BFF; 
+    min-height: 20px;  
+    border-radius: 8px;
+}
+
+#placeWidget QScrollBar::add-line:vertical,
+#placeWidget QScrollBar::sub-line:vertical {
+    background: none;    
+    height: 0px;
+}
+
+#placeWidget QScrollBar:horizontal {
+    border: none;
+    background: #E0F3FF;
+    height: 12px;        
+    margin: 0px 0px 0px 0px;
+}
+
+#placeWidget QScrollBar::handle:horizontal {
+    background: #007BFF;
+    min-width: 20px;    
+    border-radius: 8px;  
+}
+
+#placeWidget QScrollBar::add-line:horizontal,
+#placeWidget QScrollBar::sub-line:horizontal {
+    background: none;   
+    width: 0px;
+}
+</string>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="showMenu">
+   <property name="enabled">
+    <bool>true</bool>
+   </property>
+   <property name="geometry">
+    <rect>
+     <x>760</x>
+     <y>15</y>
+     <width>30</width>
+     <height>30</height>
+    </rect>
+   </property>
+   <property name="sizePolicy">
+    <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+     <horstretch>0</horstretch>
+     <verstretch>0</verstretch>
+    </sizepolicy>
+   </property>
+   <property name="font">
+    <font>
+     <family>Artifakt Element Heavy</family>
+     <bold>true</bold>
+    </font>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">QPushButton {
+    background-color: rgba(255, 255, 255, 0.8); 
+    color: #007BFF; 
+    border: 2px solid #007BFF; 
+    border-radius: 8px; 
+    padding: 10px 20px;
+}
+
+QPushButton:hover {
+    background-color: rgba(200, 200, 200, 0.5); 
+}
+</string>
+   </property>
+   <property name="text">
+    <string/>
+   </property>
+  </widget>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>
