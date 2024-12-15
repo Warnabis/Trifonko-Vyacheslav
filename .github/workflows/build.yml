@@ -12,28 +12,23 @@ jobs:
     runs-on: windows-latest
 
     steps:
-      # Checkout the repository
       - name: Checkout code
         uses: actions/checkout@v4
 
-      # Install MSYS2 and Qt
       - name: Install MSYS2 and Qt
         run: |
           choco install msys2 --confirm
-          C:\msys64\usr\bin\bash -lc "pacman -Syu --noconfirm && pacman -S --noconfirm mingw-w64-x86_64-qt6-base"
+          C:\msys64\usr\bin\bash -lc "pacman -Syu --noconfirm && pacman -S --noconfirm mingw-w64-x86_64-qt6-base mingw-w64-x86_64-qt6-tools mingw-w64-x86_64-toolchain"
 
-      # Install SonarCloud tools
-      - name: Install sonar-scanner and build-wrapper
-        uses: sonarsource/sonarcloud-github-c-cpp@v3
+      - name: Set up PATH for Qt
+        run: echo "::add-path::C:/msys64/mingw64/bin"
 
-      # Configure and build the project with build-wrapper
       - name: Configure and build the project
         run: |
           C:\msys64\mingw64\bin\qmake6 cproject.pro
-          build-wrapper-win-x86-64 --out-dir build_wrapper_output_directory make
+          build-wrapper-win-x86-64 --out-dir build_wrapper_output_directory mingw32-make
 
-      # Run SonarCloud analysis
-      - name: Run sonar-scanner
+      - name: Run SonarCloud analysis
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
