@@ -1,42 +1,41 @@
-name: Build
+name: Build and Analyze Qt Project
+
 on:
   push:
     branches:
       - main
   pull_request:
     types: [opened, synchronize, reopened]
+
 jobs:
   build:
-    name: Build
     runs-on: windows-latest
-    env:
-      BUILD_WRAPPER_OUT_DIR: build_wrapper_output_directory # Directory where build-wrapper output will be placed
+
     steps:
       # Checkout the repository
-      - uses: actions/checkout@v4
+      - name: Checkout code
+        uses: actions/checkout@v4
         with:
-          fetch-depth: 0 # Shallow clones should be disabled for a better relevancy of analysis
+          fetch-depth: 0
 
-      # Install Qt (using Chocolatey as an example)
+      # Install Qt (via Chocolatey)
       - name: Install Qt
         run: choco install qt6-default --confirm
 
       # Install SonarCloud tools
-      - name: Install sonar-scanner and build-wrapper
+      - name: Install SonarCloud tools
         uses: sonarsource/sonarcloud-github-c-cpp@v3
 
-      # Configure the project with CMake and build-wrapper
-      - name: Configure and build the project
+      # Build the project using qmake
+      - name: Build project with qmake
         run: |
-          New-Item -ItemType directory -Path build
-          cmake -S . -B build -DCMAKE_PREFIX_PATH="C:/msys64/mingw64/lib/cmake/Qt6"
-          build-wrapper-win-x86-64 --out-dir ${{ env.BUILD_WRAPPER_OUT_DIR }} cmake --build build/ --config Release
+          qmake src/cproject.pro
+          make
 
       # Run SonarCloud analysis
-      - name: Run sonar-scanner
+      - name: Run SonarCloud analysis
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }} # Put the name of your token here
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
         run: |
-          sonar-scanner --define sonar.cfamily.compile-commands="${{ env.BUILD_WRAPPER_OUT_DIR }}/compile_commands.json"
-
+          sonar-scanner
