@@ -31,10 +31,10 @@ jobs:
       # Verify presence of UI file
       - name: Verify UI file
         run: |
-          if not exist src/windows/AdminWindow.ui (
-            echo "Error: AdminWindow.ui not found."
+          if (!(Test-Path -Path "src/windows/AdminWindow.ui")) {
+            Write-Error "Error: AdminWindow.ui not found."
             exit 1
-          )
+          }
 
       # Run qmake6
       - name: Run qmake6
@@ -60,6 +60,7 @@ jobs:
             --define sonar.projectKey=YOUR_PROJECT_KEY \
             --define sonar.organization=YOUR_ORGANIZATION_NAME \
             --define sonar.host.url=https://sonarcloud.io
+
 
 
 
