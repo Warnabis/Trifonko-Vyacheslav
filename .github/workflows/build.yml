@@ -15,27 +15,31 @@ jobs:
       # Checkout the repository
       - name: Checkout code
         uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
 
-      # Install Qt (via Chocolatey)
-      - name: Install Qt
-        run: choco install qt6-default --confirm
+      # Install MSYS2 and Qt
+      - name: Install MSYS2 and Qt
+        run: |
+          choco install msys2 --confirm
+          C:\msys64\usr\bin\bash -lc "pacman -Syu --noconfirm && pacman -S --noconfirm mingw-w64-x86_64-qt6-base"
 
       # Install SonarCloud tools
-      - name: Install SonarCloud tools
+      - name: Install sonar-scanner and build-wrapper
         uses: sonarsource/sonarcloud-github-c-cpp@v3
 
-      # Build the project using qmake
-      - name: Build project with qmake
+      # Configure and build the project with build-wrapper
+      - name: Configure and build the project
         run: |
-          qmake src/cproject.pro
-          make
+          C:\msys64\mingw64\bin\qmake src/cproject.pro
+          build-wrapper-win-x86-64 --out-dir build_wrapper_output_directory make
 
       # Run SonarCloud analysis
-      - name: Run SonarCloud analysis
+      - name: Run sonar-scanner
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
         run: |
-          sonar-scanner
+          sonar-scanner \
+            --define sonar.cfamily.build-wrapper-output=build_wrapper_output_directory \
+            --define sonar.projectKey=YOUR_PROJECT_KEY \
+            --define sonar.organization=YOUR_ORGANIZATION_NAME \
+            --define sonar.host.url=https://sonarcloud.io
