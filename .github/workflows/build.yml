@@ -22,9 +22,19 @@ jobs:
           choco install msys2 --confirm
           C:\msys64\usr\bin\bash -lc "pacman -Syu --noconfirm && pacman -S --noconfirm mingw-w64-x86_64-qt6-base"
 
-      # Add MSYS2 to PATH
-      - name: Add MSYS2 to PATH
-        run: echo "C:/msys64/mingw64/bin" >> $GITHUB_PATH
+      # Add Qt tools and libraries to PATH
+      - name: Add MSYS2 and Qt to PATH
+        run: |
+          echo "C:/msys64/mingw64/bin" >> $GITHUB_PATH
+          echo "C:/msys64/mingw64/share/qt6/bin" >> $GITHUB_PATH
+
+      # Verify presence of UI file
+      - name: Verify UI file
+        run: |
+          if not exist src/windows/AdminWindow.ui (
+            echo "Error: AdminWindow.ui not found."
+            exit 1
+          )
 
       # Run qmake6
       - name: Run qmake6
@@ -36,7 +46,8 @@ jobs:
 
       # Configure and build the project with build-wrapper
       - name: Configure and build the project
-        run: build-wrapper-win-x86-64 --out-dir build_wrapper_output_directory make
+        run: |
+          build-wrapper-win-x86-64 --out-dir build_wrapper_output_directory make
 
       # Run SonarCloud analysis
       - name: Run sonar-scanner
@@ -49,5 +60,6 @@ jobs:
             --define sonar.projectKey=YOUR_PROJECT_KEY \
             --define sonar.organization=YOUR_ORGANIZATION_NAME \
             --define sonar.host.url=https://sonarcloud.io
+
 
 
