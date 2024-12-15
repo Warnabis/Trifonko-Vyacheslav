@@ -29,7 +29,7 @@ jobs:
       # Configure and build the project with build-wrapper
       - name: Configure and build the project
         run: |
-          C:\msys64\mingw64\bin\qmake src/cproject.pro
+          C:\msys64\mingw64\bin\qmake6 cproject.pro
           build-wrapper-win-x86-64 --out-dir build_wrapper_output_directory make
 
       # Run SonarCloud analysis
